@@ -2,106 +2,551 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro - FiestaWordle</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Crear cuenta - DUELO</title>
+
+  <style>
+
+    :root {
+      --bg: #121213;
+      --panel: #1c1c1d;
+      --border: #3a3a3c;
+      --text: #ffffff;
+      --muted: #818384;
+      --green: #538d4e;
+      --green-hover: #6aaa64;
+      --input: #272729;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+    }
+
+    .logo {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      letter-spacing: 6px;
+    }
+
+    .logo p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+
+      background: var(--panel);
+
+      border:
+        1px solid
+        var(--border);
+
+      padding: 32px;
+
+      border-radius: 8px;
+
+      box-shadow:
+        0 15px 50px
+        rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      margin:
+        0
+        0
+        28px;
+
+      text-align: center;
+
+      font-size: 1.2rem;
+
+      letter-spacing: 2px;
+    }
+
+    label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      font-size: 0.75rem;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+
+      background:
+        var(--input);
+
+      border:
+        1px solid
+        var(--border);
+
+      color: white;
+
+      padding:
+        14px
+        15px;
+
+      font-size: 1rem;
+
+      border-radius: 4px;
+
+      outline: none;
+
+      margin-bottom: 20px;
+    }
+
+    input:focus {
+      border-color:
+        var(--green);
+    }
+
+    button {
+      width: 100%;
+
+      border: none;
+
+      background:
+        var(--green);
+
+      color: white;
+
+      padding: 15px;
+
+      font-size: 0.9rem;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      border-radius: 4px;
+
+      cursor: pointer;
+
+      transition:
+        background
+        0.2s,
+        transform
+        0.1s;
+    }
+
+    button:hover {
+      background:
+        var(--green-hover);
+    }
+
+    button:active {
+      transform:
+        scale(0.98);
+    }
+
+    #mensaje {
+      min-height: 22px;
+
+      margin:
+        20px
+        0
+        0;
+
+      text-align: center;
+
+      color:
+        var(--muted);
+
+      font-size:
+        0.85rem;
+    }
+
+    .links {
+      margin-top: 28px;
+
+      text-align: center;
+    }
+
+    .links p {
+      margin: 0;
+
+      color:
+        var(--muted);
+
+      font-size:
+        0.85rem;
+    }
+
+    a {
+      color:
+        var(--green-hover);
+
+      text-decoration:
+        none;
+
+      font-weight:
+        bold;
+    }
+
+    a:hover {
+      text-decoration:
+        underline;
+    }
+
+    .guest {
+      display: inline-block;
+
+      margin-top: 20px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        0.8rem;
+
+      letter-spacing:
+        1px;
+    }
+
+    .footer {
+      margin-top: 25px;
+
+      color:
+        #565758;
+
+      font-size:
+        0.7rem;
+
+      letter-spacing:
+        1px;
+    }
+
+    .elo-info {
+
+      margin-bottom:
+        24px;
+
+      padding:
+        12px;
+
+      text-align:
+        center;
+
+      background:
+        rgba(
+          83,
+          141,
+          78,
+          0.12
+        );
+
+      border:
+        1px solid
+        rgba(
+          83,
+          141,
+          78,
+          0.35
+        );
+
+      border-radius:
+        4px;
+
+      color:
+        #a9d4a5;
+
+      font-size:
+        0.8rem;
+    }
+
+  </style>
 </head>
 
 <body>
 
-  <h1>Crear cuenta</h1>
+  <div class="logo">
 
-  <form id="registerForm">
+    <h1>
+      ◆ DUELO
+    </h1>
 
-    <div>
-      <label for="username">Nombre de usuario</label>
+    <p>
+      WORDLE MULTIJUGADOR
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>
+      CREAR CUENTA
+    </h2>
+
+
+    <div class="elo-info">
+
+      🏆 TODAS LAS CUENTAS EMPIEZAN
+      CON 1000 ELO
+
+    </div>
+
+
+    <form id="registerForm">
+
+
+      <label for="username">
+        NOMBRE DE USUARIO
+      </label>
+
       <input
         type="text"
         id="username"
-        name="username"
-        minlength="3"
-        maxlength="30"
+        maxlength="12"
+        autocomplete="username"
         required
       >
-    </div>
 
-    <br>
 
-    <div>
-      <label for="email">Email</label>
+      <label for="email">
+        EMAIL
+      </label>
+
       <input
         type="email"
         id="email"
-        name="email"
+        autocomplete="email"
         required
       >
-    </div>
 
-    <br>
 
-    <div>
-      <label for="password">Contraseña</label>
+      <label for="password">
+        CONTRASEÑA
+      </label>
+
       <input
         type="password"
         id="password"
-        name="password"
-        minlength="6"
+        autocomplete="new-password"
         required
       >
+
+
+      <button type="submit">
+
+        CREAR CUENTA
+
+      </button>
+
+    </form>
+
+
+    <p id="mensaje"></p>
+
+
+    <div class="links">
+
+      <p>
+
+        ¿Ya tienes una cuenta?
+
+        <br><br>
+
+        <a href="/login.html">
+
+          INICIAR SESIÓN
+
+        </a>
+
+      </p>
+
+
+      <a
+        class="guest"
+        href="/"
+      >
+
+        ← JUGAR SIN REGISTRARME
+
+      </a>
+
     </div>
 
-    <br>
+  </div>
 
-    <button type="submit">
-      Crear cuenta
-    </button>
 
-  </form>
+  <div class="footer">
 
-  <p id="message"></p>
+    FIESTAWORDLE
+
+  </div>
+
 
   <script>
-    const form = document.getElementById("registerForm");
-    const message = document.getElementById("message");
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    document
+      .getElementById(
+        "registerForm"
+      )
+      .addEventListener(
+        "submit",
+        async function(event) {
 
-      message.textContent = "Creando cuenta...";
+          event.preventDefault();
 
-      const username = document.getElementById("username").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
 
-      try {
-        const response = await fetch("/api/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password
-          })
-        });
+          const username =
+            document
+              .getElementById(
+                "username"
+              )
+              .value
+              .trim();
 
-        const data = await response.json();
 
-        if (data.success) {
-          message.textContent =
-            "¡Cuenta creada correctamente! Elo inicial: " +
-            data.user.elo;
+          const email =
+            document
+              .getElementById(
+                "email"
+              )
+              .value
+              .trim();
 
-          form.reset();
-        } else {
-          message.textContent = data.message;
+
+          const password =
+            document
+              .getElementById(
+                "password"
+              )
+              .value;
+
+
+          const mensaje =
+            document
+              .getElementById(
+                "mensaje"
+              );
+
+
+          mensaje.textContent =
+            "Creando cuenta...";
+
+
+          try {
+
+            const respuesta =
+              await fetch(
+                "/api/register",
+                {
+
+                  method:
+                    "POST",
+
+                  headers: {
+
+                    "Content-Type":
+                      "application/json"
+
+                  },
+
+                  body:
+                    JSON.stringify(
+                      {
+                        username:
+                          username,
+
+                        email:
+                          email,
+
+                        password:
+                          password
+                      }
+                    )
+
+                }
+              );
+
+
+            const data =
+              await respuesta.json();
+
+
+            if (
+              data.success
+            ) {
+
+              mensaje.textContent =
+                "¡Cuenta creada! Ahora puedes iniciar sesión.";
+
+
+              setTimeout(
+                function() {
+
+                  window.location.href =
+                    "/login.html";
+
+                },
+                1500
+              );
+
+
+            } else {
+
+              mensaje.textContent =
+                data.message ||
+                "No se pudo crear la cuenta";
+
+            }
+
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            mensaje.textContent =
+              "Error al conectar con el servidor";
+
+          }
+
         }
+      );
 
-      } catch (error) {
-        console.error(error);
-        message.textContent = "Error conectando con el servidor";
-      }
-    });
   </script>
 
 </body>
