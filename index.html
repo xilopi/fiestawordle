@@ -3,206 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiesta Wordle</title>
+    <title>DUELO - Wordle Multijugador</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #121213;
-            --card-bg: #1e1e20;
-            --text-color: #ffffff;
+            --bg-color: #0d0d0d;
+            --panel-bg: #161616;
+            --panel-border: #262626;
+            --text-main: #f3f3f3;
+            --text-muted: #888888;
+            --accent: #ff6b35;
             --correct: #538d4e;
             --present: #b59f3b;
-            --absent: #3a3a3c;
-            --border: #3a3a3c;
-            --accent: #f97316;
+            --absent: #2a2a2a;
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
         }
 
         header {
-            border-bottom: 1px solid var(--border);
             width: 100%;
-            text-align: center;
-            padding: 10px 0;
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            max-width: 900px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--panel-border);
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            box-sizing: border-box;
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: '◆';
+            color: var(--accent);
+        }
+
+        .status-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            background: #1c1c1c;
+            border: 1px solid var(--panel-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+        .dot.online { background: #10b981; }
+
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+        }
+
+        /* LOBBY INTERFACE */
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .hero-sub {
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 14px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
         .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 15px;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        input, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: #27272a;
-            color: white;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
+        .card h3 { font-size: 20px; }
 
-        button {
+        .btn {
             background: var(--accent);
+            color: white;
             border: none;
-            font-weight: bold;
+            border-radius: 8px;
+            padding: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .btn:hover { opacity: 0.9; }
+        .btn-secondary { background: #222; border: 1px solid var(--panel-border); }
 
-        /* Tablero */
+        /* GAME BOARD */
         .board {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
-            gap: 5px;
-            margin: 15px 0;
+            gap: 6px;
+            margin: 0 auto 30px auto;
+            width: fit-content;
         }
 
-        .row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
-        }
+        .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 
         .tile {
-            width: 50px;
-            height: 50px;
-            border: 2px solid var(--border);
+            width: 55px;
+            height: 55px;
+            border: 2px solid var(--panel-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 26px;
+            font-weight: 700;
             text-transform: uppercase;
+            border-radius: 6px;
         }
 
         .tile.correct { background: var(--correct); border-color: var(--correct); }
         .tile.present { background: var(--present); border-color: var(--present); }
         .tile.absent { background: var(--absent); border-color: var(--absent); }
 
-        /* Teclado */
-        .keyboard {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 100%;
-        }
-
-        .kb-row {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-        }
-
+        /* KEYBOARD */
+        .keyboard { display: flex; flex-direction: column; gap: 8px; max-width: 500px; margin: 0 auto; }
+        .kb-row { display: flex; justify-content: center; gap: 6px; }
         .key {
-            background: #818384;
+            background: #222;
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 12px 8px;
-            font-weight: bold;
+            border-radius: 6px;
+            height: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
             cursor: pointer;
             flex: 1;
-            max-width: 40px;
-            margin: 0;
         }
-
-        .key.large { flex: 1.5; max-width: 65px; }
+        .key.large { flex: 1.5; }
         .key.correct { background: var(--correct); }
         .key.present { background: var(--present); }
         .key.absent { background: var(--absent); }
 
-        .hidden { display: none; }
-        .player-list { list-style: none; padding: 0; }
-        .player-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .hidden { display: none !important; }
+        .player-list { list-style: none; margin: 15px 0; }
+        .player-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--panel-border); }
     </style>
 </head>
 <body>
 
-    <header>DUELO</header>
+    <header>
+        <div class="logo">DUELO</div>
+        <div class="status-badge"><div id="status-dot" class="dot"></div><span id="status-text">Sin conectar</span></div>
+    </header>
 
-    <div class="container">
-        <!-- Pantalla Inicial -->
-        <div id="lobby-screen" class="card">
-            <h3>Entrar a la partida</h3>
-            <input type="text" id="nickname" placeholder="Tu Apodo">
-            <button onclick="createRoom()">Crear Sala</button>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="room-code" placeholder="Código (4 dígitos)">
-                <button onclick="joinRoom()">Entrar</button>
+    <div class="main-container">
+        <!-- PANTALLA INICIAL -->
+        <div id="lobby-screen">
+            <h1 class="hero-title">Wordle Multijugador</h1>
+            <p class="hero-sub">Hasta 7 jugadores en tiempo real. Adivina la palabra antes que los demás.</p>
+
+            <div class="input-group">
+                <label>Tu Nombre</label>
+                <input type="text" id="nickname" placeholder="Introduce tu apodo">
+            </div>
+
+            <div class="grid-cards">
+                <div class="card">
+                    <h3>Crear Sala</h3>
+                    <button class="btn" onclick="createRoom()">Crear nueva partida</button>
+                </div>
+                <div class="card">
+                    <h3>Unirse a Sala</h3>
+                    <input type="text" id="room-code" placeholder="Código (4 dígitos)">
+                    <button class="btn btn-secondary" onclick="joinRoom()">Entrar</button>
+                </div>
             </div>
         </div>
 
-        <!-- Sala de Espera -->
+        <!-- SALA DE ESPERA -->
         <div id="room-screen" class="card hidden">
-            <h3 id="room-title">Sala: ----</h3>
+            <h2 id="room-title">Sala: ----</h2>
             <ul id="players-ul" class="player-list"></ul>
-            <button id="start-btn" onclick="hostStartGame()" class="hidden">Empezar Partida</button>
+            <button id="start-btn" onclick="hostStartGame()" class="btn hidden">Empezar Partida</button>
         </div>
 
-        <!-- Pantalla de Juego -->
+        <!-- JUEGO -->
         <div id="game-screen" class="hidden">
-            <div id="status-bar" style="text-align: center; margin-bottom: 10px;"></div>
-            <div id="board" class="board"></div>
-            <div id="keyboard" class="keyboard"></div>
+            <div class="board" id="board"></div>
+            <div class="keyboard" id="keyboard"></div>
         </div>
 
-        <!-- Marcador / Resultados -->
+        <!-- RESULTADOS -->
         <div id="results-screen" class="card hidden">
-            <h3>Resultados de la ronda</h3>
-            <div id="ranking-list"></div>
-            <button id="next-round-btn" onclick="readyForNextRound()">Listo para siguiente ronda</button>
+            <h2>Clasificación de la ronda</h2>
+            <div id="ranking-list" style="margin: 20px 0;"></div>
+            <button id="next-round-btn" onclick="readyForNextRound()" class="btn">Listo para la siguiente ronda</button>
         </div>
     </div>
 
 <script>
     const WORDS = ["PERRO", "GATOS", "CASAS", "ARBOL", "LIBRO", "PLAZA", "FUEGO", "NUBE", "CARTA", "PIANO"];
-    let peer = null;
-    let connections = [];
-    let hostConn = null;
-    let isHost = false;
-    let myId = "";
-    let myName = "";
-    let roomCode = "";
+    let peer = null, connections = [], hostConn = null, isHost = false;
+    let myId = "", myName = "", roomCode = "", targetWord = "", currentAttempt = 0, currentGuess = "", gameOver = false;
+    let players = {}, startTime = 0;
 
-    let targetWord = "";
-    let currentAttempt = 0;
-    let currentGuess = "";
-    let gameOver = false;
-
-    let players = {}; // { id: { name, attempts, won, greens, yellows, finishTime, ready } }
-    let startTime = 0;
+    function setStatus(text, online = false) {
+        document.getElementById('status-text').innerText = text;
+        const dot = document.getElementById('status-dot');
+        if (online) dot.classList.add('online'); else dot.classList.remove('online');
+    }
 
     function initBoard() {
         const board = document.getElementById('board');
@@ -254,6 +322,7 @@
         peer.on('open', (id) => {
             myId = id;
             players[myId] = { name: myName, attempts: 0, won: false, greens: 0, yellows: 0, finishTime: 0, ready: false };
+            setStatus("Host Conectado", true);
             showRoomUI();
         });
 
@@ -278,14 +347,13 @@
             myId = id;
             hostConn = peer.connect(`duelo-${roomCode}`);
             setupConnListeners(hostConn);
+            setStatus("Conectado", true);
         });
     }
 
     function setupConnListeners(conn) {
         conn.on('open', () => {
-            if (!isHost) {
-                conn.send({ type: 'JOIN', name: myName, id: myId });
-            }
+            if (!isHost) conn.send({ type: 'JOIN', name: myName, id: myId });
         });
 
         conn.on('data', (data) => {
@@ -347,9 +415,11 @@
             li.innerHTML = `<span>${p.name} ${p.ready ? '✅' : ''}</span>`;
             if (isHost && id !== myId) {
                 const kickBtn = document.createElement('button');
-                kickBtn.innerText = 'X';
-                kickBtn.style.width = '30px';
-                kickBtn.style.padding = '2px';
+                kickBtn.innerText = '✕';
+                kickBtn.style.background = 'transparent';
+                kickBtn.style.border = 'none';
+                kickBtn.style.color = '#ff4444';
+                kickBtn.style.cursor = 'pointer';
                 kickBtn.onclick = () => kickPlayer(id);
                 li.appendChild(kickBtn);
             }
@@ -480,17 +550,15 @@
         const activePlayers = Object.entries(players);
         const total = activePlayers.length;
 
-        // LÓGICA 1VS1 (2 Jugadores)
+        // REGLA 1VS1 (2 Jugadores)
         if (total === 2) {
             const [p1Id, p1] = activePlayers[0];
             const [p2Id, p2] = activePlayers[1];
 
             let winnerId = null;
 
-            // Si uno gana, el otro pierde inmediatamente
             if (p1.won) winnerId = p1Id;
             else if (p2.won) winnerId = p2Id;
-            // Si uno se queda sin intentos y falla, PIERDE (gana el rival)
             else if (p1.attempts >= 6 && !p1.won) winnerId = p2Id;
             else if (p2.attempts >= 6 && !p2.won) winnerId = p1Id;
 
@@ -505,7 +573,7 @@
             }
         }
 
-        // LÓGICA MULTIJUGADOR (3 a 7 jugadores)
+        // MULTIJUGADOR (3-7 Jugadores)
         const allFinished = activePlayers.every(([_, p]) => p.won || p.attempts >= 6);
         if (allFinished) {
             const rankings = activePlayers.map(([id, p]) => ({ id, ...p })).sort((a, b) => {
@@ -513,7 +581,6 @@
                 if (!a.won && b.won) return 1;
                 if (a.won && b.won) return a.finishTime - b.finishTime;
 
-                // Desempate de derrotados: Verdes -> Amarillas -> Tiempo
                 if (b.greens !== a.greens) return b.greens - a.greens;
                 if (b.yellows !== a.yellows) return b.yellows - a.yellows;
                 return a.finishTime - b.finishTime;
