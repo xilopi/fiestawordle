@@ -948,25 +948,6 @@
 </head>
 
 <body>
-
-    <div id="accountCorner" style="position:fixed;top:18px;right:18px;z-index:1000;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
-      <div id="guestAccountActions" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
-        <a href="/login.html" class="btn btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">
-          Iniciar sesión
-        </a>
-        <a href="/register.html" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">
-          Crear cuenta
-        </a>
-      </div>
-
-      <div id="loggedAccountActions" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
-        <div id="userAccountInfo" style="font-size:0.8rem;color:var(--accent-soft);white-space:nowrap;"></div>
-        <button id="btnLogout" class="btn btn-secondary" type="button">
-          Cerrar sesión
-        </button>
-      </div>
-    </div>
-
   <div class="noise-overlay"></div>
 
   <header class="topbar">
@@ -1017,7 +998,7 @@
           class="name-input"
           type="text"
           maxlength="12"
-          placeholder="Introduce nombre de invitado"
+          placeholder="Introduce tu apodo"
         />
       </div>
 
@@ -1053,12 +1034,6 @@
           >
             Entrar
           </button>
-
-        <div style="display:flex;justify-content:center;margin-top:16px;">
-          <button id="btnRanking" class="btn btn-secondary" type="button">
-            🏆 Ranking Elo global
-          </button>
-        </div>
         </div>
       </div>
 
@@ -1381,21 +1356,6 @@
         userNameInput:
           document.getElementById("userNameInput"),
 
-        guestAccountActions:
-          document.getElementById("guestAccountActions"),
-
-        loggedAccountActions:
-          document.getElementById("loggedAccountActions"),
-
-        userAccountInfo:
-          document.getElementById("userAccountInfo"),
-
-        btnLogout:
-          document.getElementById("btnLogout"),
-
-        btnRanking:
-          document.getElementById("btnRanking"),
-
         setupPanels:
           document.getElementById("setupPanels"),
 
@@ -1469,15 +1429,6 @@
       let myName = "";
       let myId = "";
 
-      const loggedUserId =
-        localStorage.getItem("userId");
-
-      const loggedUsername =
-        localStorage.getItem("username");
-
-      const loggedUserElo =
-        localStorage.getItem("elo");
-
       let isHost = false;
 
       let roomCode = "";
@@ -1510,71 +1461,15 @@
 
       let keyStates = {};
 
-      const accountInfo =
-        document.getElementById(
-          "userAccountInfo"
+      const savedName =
+        localStorage.getItem(
+          "duelo_nickname"
         );
 
-      if (
-        loggedUserId &&
-        loggedUsername
-      ) {
+      if (savedName) {
         els.userNameInput.value =
-          loggedUsername;
-
-        els.userNameInput.disabled =
-          true;
-
-        els.userNameInput.style.opacity =
-          "0.7";
-
-        els.userNameInput.style.cursor =
-          "not-allowed";
-
-        accountInfo.textContent =
-          loggedUsername +
-          " · 🏆 " +
-          (loggedUserElo || 1000) +
-          " Elo";
-
-        els.guestAccountActions.style.display =
-          "none";
-
-        els.loggedAccountActions.style.display =
-          "flex";
-
-      } else {
-
-        const savedName =
-          localStorage.getItem(
-            "duelo_nickname"
-          );
-
-        if (savedName) {
-          els.userNameInput.value =
-            savedName;
-        }
-
+          savedName;
       }
-
-      els.btnLogout.addEventListener(
-        "click",
-        () => {
-          localStorage.removeItem("userId");
-          localStorage.removeItem("username");
-          localStorage.removeItem("elo");
-          window.location.href = "/";
-        }
-      );
-
-      els.btnRanking.addEventListener(
-        "click",
-        () => {
-          alert(
-            "El ranking global estará disponible aquí próximamente."
-          );
-        }
-      );
 
       /*
        * ============================
