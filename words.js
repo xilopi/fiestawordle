@@ -1,7 +1,3 @@
-// Diccionario de Fiesta Wordle
-// Soluciones: se conservan las del juego original.
-// Palabras válidas: diccionario ampliado de 5 letras.
-
 const PALABRAS_RESPUESTA = [
   'ABRIR',
   'ACTOR',
