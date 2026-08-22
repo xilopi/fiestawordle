@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -428,15 +429,18 @@
         opacity: 0.5;
       }
 
+      /* =========================================================
+         TECLADO VIRTUAL FUNCIONAL
+         ========================================================= */
+
       .keyboard {
         display: flex;
         flex-direction: column;
         gap: 6px;
         width: 100%;
-        max-width: 360px;
+        max-width: 420px;
         user-select: none;
-        pointer-events: none;
-        opacity: 0.9;
+        opacity: 1;
       }
 
       .keyboard-row {
@@ -447,17 +451,38 @@
 
       .key-tile {
         flex: 1;
-        height: 38px;
+        min-width: 0;
+        height: 42px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: var(--panel-raised);
         border: 1px solid var(--border);
         border-radius: 6px;
+        font-family: var(--font-mono);
         font-size: 0.8rem;
         font-weight: 700;
         color: var(--text);
-        transition: background 0.2s ease;
+        transition:
+          background 0.15s ease,
+          transform 0.08s ease,
+          border-color 0.15s ease;
+        cursor: pointer;
+        touch-action: manipulation;
+        padding: 0 5px;
+      }
+
+      .key-tile:hover {
+        border-color: var(--accent);
+      }
+
+      .key-tile:active {
+        transform: scale(0.92);
+      }
+
+      .key-tile.special-key {
+        flex: 1.5;
+        font-size: 0.65rem;
       }
 
       .rivals-grid {
@@ -616,6 +641,20 @@
           max-width: 44px;
           max-height: 44px;
         }
+
+        .keyboard {
+          max-width: 100%;
+          padding: 0 4px;
+        }
+
+        .key-tile {
+          height: 42px;
+          font-size: 0.72rem;
+        }
+
+        .key-tile.special-key {
+          font-size: 0.58rem;
+        }
       }
     </style>
   </head>
@@ -653,8 +692,9 @@
               display: block;
               margin-bottom: 6px;
             "
-            >TU NOMBRE</label
           >
+            TU NOMBRE
+          </label>
 
           <input
             id="userNameInput"
@@ -698,16 +738,17 @@
               align-items: center;
             "
           >
-            <span style="font-size: 0.8rem; color: var(--text-dim)"
-              >CÓDIGO DE SALA:</span
-            >
+            <span style="font-size: 0.8rem; color: var(--text-dim)">
+              CÓDIGO DE SALA:
+            </span>
 
             <span
               id="roomCodeDisplay"
               class="code-display"
               title="Toca para copiar"
-              >----</span
             >
+              ----
+            </span>
           </div>
 
           <div class="players-list" id="playersList"></div>
@@ -750,9 +791,9 @@
 
         <p style="margin: 0; font-size: 0.85rem; color: var(--text-dim)">
           La palabra era:
-          <strong id="resultWord" style="color: var(--accent-soft)"
-            >—</strong
-          >
+          <strong id="resultWord" style="color: var(--accent-soft)">
+            —
+          </strong>
         </p>
 
         <div class="leaderboard" id="leaderboard"></div>
@@ -853,7 +894,7 @@
       const KEYBOARD_LAYOUT = [
         ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
         ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ"],
-        ["Z", "X", "C", "V", "B", "N", "M"],
+        ["BORRAR", "Z", "X", "C", "V", "B", "N", "M", "ENTER"],
       ];
 
       const MAX_PLAYERS = 7;
@@ -1237,17 +1278,6 @@
                   winnerCount++;
                 }
 
-                /*
-                 * =====================================================
-                 * CAMBIO 1VS1
-                 * =====================================================
-                 *
-                 * Si estamos en un duelo 1vs1 y el rival se queda sin
-                 * intentos, NO usamos verdes/amarillas para decidir.
-                 *
-                 * El jugador que se queda sin intentos pierde.
-                 * El otro jugador gana automáticamente.
-                 */
                 if (
                   Object.keys(players).length === 2 &&
                   !data.won
@@ -1529,11 +1559,31 @@
                   e.key === "Backspace" ||
                   e.keyCode === 8
                 ) {
+                  e.preventDefault();
+
                   if (!rowBuffers[r][c] && c > 0) {
                     focusTile(r, c - 1);
                     setLetter(r, c - 1, "");
                   } else {
                     setLetter(r, c, "");
+                  }
+                } else if (e.key.length === 1) {
+                  const letter = e.key
+                    .toUpperCase()
+                    .replace(/[^A-ZÑ]/g, "");
+
+                  if (letter) {
+                    e.preventDefault();
+
+                    setLetter(
+                      r,
+                      c,
+                      letter
+                    );
+
+                    if (c < 4) {
+                      focusTile(r, c + 1);
+                    }
                   }
                 }
               });
@@ -1548,6 +1598,12 @@
           }
         }
 
+        /*
+         * =========================================================
+         * TECLADO VIRTUAL
+         * =========================================================
+         */
+
         function buildVirtualKeyboard() {
           els.virtualKeyboard.innerHTML = "";
 
@@ -1557,11 +1613,37 @@
             rowDiv.className = "keyboard-row";
 
             rowKeys.forEach((key) => {
-              const keyDiv = document.createElement("div");
+              const keyDiv = document.createElement("button");
 
+              keyDiv.type = "button";
               keyDiv.className = "key-tile";
               keyDiv.dataset.key = key;
               keyDiv.textContent = key;
+
+              if (
+                key === "BORRAR" ||
+                key === "ENTER"
+              ) {
+                keyDiv.classList.add("special-key");
+              }
+
+              if (key === "BORRAR") {
+                keyDiv.setAttribute(
+                  "aria-label",
+                  "Borrar letra"
+                );
+              }
+
+              if (key === "ENTER") {
+                keyDiv.setAttribute(
+                  "aria-label",
+                  "Enviar palabra"
+                );
+              }
+
+              keyDiv.addEventListener("click", () => {
+                handleVirtualKey(key);
+              });
 
               rowDiv.appendChild(keyDiv);
             });
@@ -1570,7 +1652,101 @@
           });
         }
 
-        function updateVirtualKeyboard(word, pattern) {
+        /*
+         * Maneja todas las pulsaciones del teclado virtual.
+         */
+        function handleVirtualKey(key) {
+          if (
+            !players[myId] ||
+            players[myId].finished
+          ) {
+            return;
+          }
+
+          /*
+           * ENTER
+           */
+          if (key === "ENTER") {
+            submitGuess();
+            return;
+          }
+
+          /*
+           * BORRAR
+           */
+          if (key === "BORRAR") {
+            /*
+             * Si la casilla actual tiene una letra,
+             * la borramos sin movernos.
+             */
+            if (
+              rowBuffers[currentRow][currentCol]
+            ) {
+              setLetter(
+                currentRow,
+                currentCol,
+                ""
+              );
+
+              focusTile(
+                currentRow,
+                currentCol
+              );
+
+              return;
+            }
+
+            /*
+             * Si la casilla actual está vacía,
+             * retrocedemos una posición.
+             */
+            if (currentCol > 0) {
+              currentCol--;
+
+              setLetter(
+                currentRow,
+                currentCol,
+                ""
+              );
+
+              focusTile(
+                currentRow,
+                currentCol
+              );
+            }
+
+            return;
+          }
+
+          /*
+           * LETRA
+           */
+          if (/^[A-ZÑ]$/.test(key)) {
+            setLetter(
+              currentRow,
+              currentCol,
+              key
+            );
+
+            /*
+             * Avanzar automáticamente a la
+             * siguiente casilla.
+             */
+            if (currentCol < 4) {
+              currentCol++;
+
+              focusTile(
+                currentRow,
+                currentCol
+              );
+            }
+          }
+        }
+
+        function updateVirtualKeyboard(
+          word,
+          pattern
+        ) {
           for (let i = 0; i < 5; i++) {
             const letter = word[i];
             const status = pattern[i];
@@ -1634,15 +1810,23 @@
             wrap.classList.add("focused");
 
             const inp =
-              wrap.querySelector(".tile-native-input");
+              wrap.querySelector(
+                ".tile-native-input"
+              );
 
-            if (document.activeElement !== inp) {
+            if (
+              document.activeElement !== inp
+            ) {
               inp.focus();
             }
           }
         }
 
-        function setLetter(r, c, letter) {
+        function setLetter(
+          r,
+          c,
+          letter
+        ) {
           rowBuffers[r][c] = letter;
 
           const wrap = els.boardMe.querySelector(
@@ -1650,60 +1834,93 @@
           );
 
           if (wrap) {
-            wrap.querySelector(".tile").textContent = letter;
+            wrap.querySelector(
+              ".tile"
+            ).textContent = letter;
           }
         }
 
         function buildRivalBoards() {
           els.rivalsGrid.innerHTML = "";
 
-          Object.entries(players).forEach(([id, p]) => {
-            if (id === myId) return;
+          Object.entries(players).forEach(
+            ([id, p]) => {
+              if (id === myId) return;
 
-            const card = document.createElement("div");
+              const card =
+                document.createElement(
+                  "div"
+                );
 
-            card.className = "rival-card";
-            card.id = `rival-card-${id}`;
+              card.className = "rival-card";
+              card.id =
+                `rival-card-${id}`;
 
-            card.innerHTML = `
-              <div class="rival-header">
-                <span>${p.name}</span>
-                <span id="rival-att-${id}">0/6</span>
-              </div>
+              card.innerHTML = `
+                <div class="rival-header">
+                  <span>${p.name}</span>
+                  <span id="rival-att-${id}">0/6</span>
+                </div>
 
-              <div
-                class="board board--rival"
-                id="board-rival-${id}"
-              ></div>
-            `;
+                <div
+                  class="board board--rival"
+                  id="board-rival-${id}"
+                ></div>
+              `;
 
-            const board =
-              card.querySelector(`#board-rival-${id}`);
+              const board =
+                card.querySelector(
+                  `#board-rival-${id}`
+                );
 
-            for (let r = 0; r < 6; r++) {
-              const row = document.createElement("div");
+              for (
+                let r = 0;
+                r < 6;
+                r++
+              ) {
+                const row =
+                  document.createElement(
+                    "div"
+                  );
 
-              row.className = "board-row";
-              row.dataset.row = r;
+                row.className =
+                  "board-row";
 
-              for (let c = 0; c < 5; c++) {
-                const wrap = document.createElement("div");
+                row.dataset.row = r;
 
-                wrap.className = "tile-wrap";
+                for (
+                  let c = 0;
+                  c < 5;
+                  c++
+                ) {
+                  const wrap =
+                    document.createElement(
+                      "div"
+                    );
 
-                const tile = document.createElement("div");
+                  wrap.className =
+                    "tile-wrap";
 
-                tile.className = "tile";
+                  const tile =
+                    document.createElement(
+                      "div"
+                    );
 
-                wrap.appendChild(tile);
-                row.appendChild(wrap);
+                  tile.className =
+                    "tile";
+
+                  wrap.appendChild(tile);
+                  row.appendChild(wrap);
+                }
+
+                board.appendChild(row);
               }
 
-              board.appendChild(row);
+              els.rivalsGrid.appendChild(
+                card
+              );
             }
-
-            els.rivalsGrid.appendChild(card);
-          });
+          );
         }
 
         function updateRivalBoard(
@@ -1711,114 +1928,113 @@
           r,
           pattern
         ) {
-          const card = document.getElementById(
-            `rival-card-${rivalId}`
-          );
+          const card =
+            document.getElementById(
+              `rival-card-${rivalId}`
+            );
 
           if (!card) return;
 
           card.querySelector(
             `#rival-att-${rivalId}`
-          ).textContent = `${r + 1}/6`;
+          ).textContent =
+            `${r + 1}/6`;
 
-          const row = card.querySelector(
-            `.board-row[data-row="${r}"]`
-          );
+          const row =
+            card.querySelector(
+              `.board-row[data-row="${r}"]`
+            );
 
           if (!row) return;
 
-          const tiles = row.querySelectorAll(".tile");
+          const tiles =
+            row.querySelectorAll(
+              ".tile"
+            );
 
-          tiles.forEach((t, i) => {
-            t.classList.add(pattern[i]);
-          });
+          tiles.forEach(
+            (t, i) => {
+              t.classList.add(
+                pattern[i]
+              );
+            }
+          );
         }
 
-        /*
-         * ============================================================
-         * NUEVA FUNCIÓN PARA 1VS1
-         * ============================================================
-         *
-         * Recibe el ID del jugador que ha perdido.
-         *
-         * En un 1vs1:
-         *
-         * - El jugador que agota los 6 intentos = pierde.
-         * - El otro jugador = gana.
-         * - El ganador queda #1.
-         * - El que agotó los intentos queda #2.
-         *
-         * IMPORTANTE:
-         * No se tienen en cuenta verdes ni amarillas para determinar
-         * el resultado.
-         */
-        function resolveDuelLoss(loserId) {
-          const playerIds = Object.keys(players);
+        function resolveDuelLoss(
+          loserId
+        ) {
+          const playerIds =
+            Object.keys(players);
 
-          if (playerIds.length !== 2) {
+          if (
+            playerIds.length !== 2
+          ) {
             return;
           }
 
-          const winnerId = playerIds.find(
-            (id) => id !== loserId
-          );
+          const winnerId =
+            playerIds.find(
+              (id) =>
+                id !== loserId
+            );
 
           if (!winnerId) {
             return;
           }
 
-          const loser = players[loserId];
-          const winner = players[winnerId];
+          const loser =
+            players[loserId];
 
-          /*
-           * El jugador que falló los 6 intentos pierde.
-           */
+          const winner =
+            players[winnerId];
+
           loser.won = false;
           loser.rank = 2;
           loser.finished = true;
 
-          /*
-           * El rival gana automáticamente.
-           *
-           * No importa cuántas verdes o amarillas tenga.
-           */
           winner.won = true;
           winner.rank = 1;
           winner.finished = true;
 
-          /*
-           * Si el ganador todavía no había terminado porque el otro
-           * jugador ha perdido primero, registramos el momento.
-           */
           if (!winner.finishTime) {
-            winner.finishTime = Date.now();
+            winner.finishTime =
+              Date.now();
           }
 
-          /*
-           * Nos aseguramos de que el contador de ganadores sea
-           * coherente.
-           */
           winnerCount = 1;
         }
 
         function submitGuess() {
-          if (players[myId].finished) return;
+          if (
+            players[myId].finished
+          ) {
+            return;
+          }
 
           const word =
-            rowBuffers[currentRow].join("");
+            rowBuffers[
+              currentRow
+            ].join("");
 
-          if (word.length < 5) {
+          if (
+            word.length < 5
+          ) {
             return showToast(
               "Completa las 5 letras"
             );
           }
 
-          const pattern = evaluateGuess(
-            word,
-            secretWord
-          );
+          const pattern =
+            evaluateGuess(
+              word,
+              secretWord
+            );
 
-          paintRow(currentRow, pattern);
+          paintRow(
+            currentRow,
+            pattern
+          );
 
           updateVirtualKeyboard(
             word,
@@ -1827,63 +2043,81 @@
 
           const currentGreens =
             pattern.filter(
-              (p) => p === "correct"
+              (p) =>
+                p === "correct"
             ).length;
 
           const currentYellows =
             pattern.filter(
-              (p) => p === "present"
+              (p) =>
+                p === "present"
             ).length;
 
-          players[myId].greens += currentGreens;
-          players[myId].yellows += currentYellows;
+          players[myId].greens +=
+            currentGreens;
+
+          players[myId].yellows +=
+            currentYellows;
 
           broadcast({
             type: "guess",
             row: currentRow,
             pattern,
-            greens: players[myId].greens,
-            yellows: players[myId].yellows,
+            greens:
+              players[myId].greens,
+            yellows:
+              players[myId].yellows,
           });
 
-          const won = pattern.every(
-            (p) => p === "correct"
-          );
+          const won =
+            pattern.every(
+              (p) =>
+                p === "correct"
+            );
 
-          /*
-           * ==========================================================
-           * CASO 1: EL JUGADOR HA GANADO
-           * ==========================================================
-           */
           if (won) {
-            players[myId].finished = true;
-            players[myId].won = true;
-            players[myId].finishTime = Date.now();
+            players[myId].finished =
+              true;
+
+            players[myId].won =
+              true;
+
+            players[myId].finishTime =
+              Date.now();
 
             winnerCount++;
 
-            const rank = winnerCount;
+            const rank =
+              winnerCount;
 
-            players[myId].rank = rank;
+            players[myId].rank =
+              rank;
 
-            /*
-             * NUEVO COMPORTAMIENTO 1VS1:
-             *
-             * Si es un duelo 1vs1 y nosotros hemos acertado,
-             * automáticamente el rival queda #2.
-             *
-             * De esta forma no dependemos de sus verdes/amarillas.
-             */
-            if (Object.keys(players).length === 2) {
+            if (
+              Object.keys(
+                players
+              ).length === 2
+            ) {
               const opponentId =
-                Object.keys(players).find(
-                  (id) => id !== myId
+                Object.keys(
+                  players
+                ).find(
+                  (id) =>
+                    id !== myId
                 );
 
               if (opponentId) {
-                players[opponentId].won = false;
-                players[opponentId].rank = 2;
-                players[opponentId].finished = true;
+                players[
+                  opponentId
+                ].won = false;
+
+                players[
+                  opponentId
+                ].rank = 2;
+
+                players[
+                  opponentId
+                ].finished = true;
               }
             }
 
@@ -1893,9 +2127,15 @@
               type: "finish",
               won: true,
               rank,
-              greens: players[myId].greens,
-              yellows: players[myId].yellows,
-              finishTime: players[myId].finishTime,
+              greens:
+                players[myId]
+                  .greens,
+              yellows:
+                players[myId]
+                  .yellows,
+              finishTime:
+                players[myId]
+                  .finishTime,
             });
 
             showToast(
@@ -1903,64 +2143,68 @@
             );
 
             checkGameEnd();
-          }
+          } else if (
+            currentRow >= 5
+          ) {
+            players[myId].finished =
+              true;
 
-          /*
-           * ==========================================================
-           * CASO 2: HA AGOTADO LOS 6 INTENTOS
-           * ==========================================================
-           */
-          else if (currentRow >= 5) {
-            players[myId].finished = true;
-            players[myId].won = false;
-            players[myId].rank = null;
-            players[myId].finishTime = Date.now();
+            players[myId].won =
+              false;
+
+            players[myId].rank =
+              null;
+
+            players[myId].finishTime =
+              Date.now();
 
             finishedCount++;
 
-            /*
-             * ========================================================
-             * CAMBIO PRINCIPAL
-             * ========================================================
-             *
-             * En 1VS1, quedarse sin intentos significa PERDER.
-             *
-             * Por tanto, antes de mostrar los resultados hacemos que
-             * el otro jugador sea el ganador.
-             */
-            if (Object.keys(players).length === 2) {
-              resolveDuelLoss(myId);
+            if (
+              Object.keys(
+                players
+              ).length === 2
+            ) {
+              resolveDuelLoss(
+                myId
+              );
             }
 
             broadcast({
               type: "finish",
               won: false,
-              rank: Object.keys(players).length === 2
-                ? 2
-                : null,
-              greens: players[myId].greens,
-              yellows: players[myId].yellows,
-              finishTime: players[myId].finishTime,
+              rank:
+                Object.keys(
+                  players
+                ).length === 2
+                  ? 2
+                  : null,
+              greens:
+                players[myId]
+                  .greens,
+              yellows:
+                players[myId]
+                  .yellows,
+              finishTime:
+                players[myId]
+                  .finishTime,
             });
 
             showToast(
               "Has agotado tus intentos"
             );
 
-            if (document.activeElement) {
+            if (
+              document.activeElement
+            ) {
               document.activeElement.blur();
             }
 
             checkGameEnd();
-          }
-
-          /*
-           * ==========================================================
-           * SIGUIENTE INTENTO
-           * ==========================================================
-           */
-          else {
+          } else {
             currentRow++;
+
+            currentCol = 0;
 
             focusTile(
               currentRow,
@@ -1973,31 +2217,64 @@
           guess,
           target
         ) {
-          const res = Array(5).fill("absent");
+          const res =
+            Array(5).fill(
+              "absent"
+            );
 
-          const tArr = target.split("");
+          const tArr =
+            target.split("");
 
-          const used = Array(5).fill(false);
+          const used =
+            Array(5).fill(
+              false
+            );
 
-          for (let i = 0; i < 5; i++) {
-            if (guess[i] === tArr[i]) {
-              res[i] = "correct";
-              used[i] = true;
+          for (
+            let i = 0;
+            i < 5;
+            i++
+          ) {
+            if (
+              guess[i] ===
+              tArr[i]
+            ) {
+              res[i] =
+                "correct";
+
+              used[i] =
+                true;
             }
           }
 
-          for (let i = 0; i < 5; i++) {
-            if (res[i] === "correct") continue;
+          for (
+            let i = 0;
+            i < 5;
+            i++
+          ) {
+            if (
+              res[i] ===
+              "correct"
+            ) {
+              continue;
+            }
 
-            const idx = tArr.findIndex(
-              (l, j) =>
-                !used[j] &&
-                l === guess[i]
-            );
+            const idx =
+              tArr.findIndex(
+                (l, j) =>
+                  !used[j] &&
+                  l ===
+                    guess[i]
+              );
 
-            if (idx !== -1) {
-              res[i] = "present";
-              used[idx] = true;
+            if (
+              idx !== -1
+            ) {
+              res[i] =
+                "present";
+
+              used[idx] =
+                true;
             }
           }
 
@@ -2018,58 +2295,69 @@
               ".tile-wrap"
             );
 
-          wraps.forEach((w, i) => {
-            w.querySelector(".tile").classList.add(
-              pattern[i]
-            );
-          });
+          wraps.forEach(
+            (w, i) => {
+              w.querySelector(
+                ".tile"
+              ).classList.add(
+                pattern[i]
+              );
+            }
+          );
         }
 
         function checkGameEnd() {
           const totalPlayers =
-            Object.keys(players).length;
-
-          /*
-           * ==========================================================
-           * 1VS1
-           * ==========================================================
-           *
-           * Aquí NO se utiliza el número de verdes/amarillas para
-           * decidir quién gana.
-           *
-           * Si uno ha ganado, ese jugador es #1.
-           *
-           * Si uno ha perdido por agotar los intentos, el otro es #1
-           * y el que falló es #2.
-           */
-          if (totalPlayers === 2) {
-            const duelWinner = Object.entries(
+            Object.keys(
               players
-            ).find(
-              ([, p]) => p.won
-            );
+            ).length;
+
+          if (
+            totalPlayers === 2
+          ) {
+            const duelWinner =
+              Object.entries(
+                players
+              ).find(
+                ([, p]) =>
+                  p.won
+              );
 
             if (duelWinner) {
               const winnerId =
                 duelWinner[0];
 
               const loserEntry =
-                Object.entries(players).find(
+                Object.entries(
+                  players
+                ).find(
                   ([id]) =>
-                    id !== winnerId
+                    id !==
+                    winnerId
                 );
 
-              players[winnerId].won = true;
-              players[winnerId].rank = 1;
-              players[winnerId].finished = true;
+              players[
+                winnerId
+              ].won = true;
+
+              players[
+                winnerId
+              ].rank = 1;
+
+              players[
+                winnerId
+              ].finished = true;
 
               if (loserEntry) {
                 const loser =
-                  players[loserEntry[0]];
+                  players[
+                    loserEntry[0]
+                  ];
 
                 loser.won = false;
                 loser.rank = 2;
-                loser.finished = true;
+                loser.finished =
+                  true;
               }
 
               setTimeout(
@@ -2080,12 +2368,10 @@
               return;
             }
 
-            /*
-             * Si alguien ha perdido y todavía no hay ganador
-             * establecido, resolvemos el duelo por eliminación.
-             */
             const someoneLost =
-              Object.values(players).some(
+              Object.values(
+                players
+              ).some(
                 (p) =>
                   p.finished &&
                   !p.won
@@ -2096,7 +2382,9 @@
               finishedCount >= 1
             ) {
               const loserEntry =
-                Object.entries(players).find(
+                Object.entries(
+                  players
+                ).find(
                   ([, p]) =>
                     p.finished &&
                     !p.won
@@ -2119,15 +2407,10 @@
             return;
           }
 
-          /*
-           * ==========================================================
-           * 3 O MÁS JUGADORES
-           * ==========================================================
-           *
-           * Esta parte mantiene la lógica original.
-           */
           const winners =
-            Object.values(players).filter(
+            Object.values(
+              players
+            ).filter(
               (p) => p.won
             ).length;
 
@@ -2145,7 +2428,8 @@
             );
           } else if (
             activePlayers === 1 &&
-            winners === totalPlayers - 1
+            winners ===
+              totalPlayers - 1
           ) {
             setTimeout(
               showFinalResults,
@@ -2158,8 +2442,11 @@
           if (!isHost) return;
 
           const nonHostPlayers =
-            Object.entries(players).filter(
-              ([id]) => id !== myId
+            Object.entries(
+              players
+            ).filter(
+              ([id]) =>
+                id !== myId
             );
 
           const readyCount =
@@ -2180,28 +2467,27 @@
           els.resultWord.textContent =
             secretWord;
 
-          els.leaderboard.innerHTML = "";
+          els.leaderboard.innerHTML =
+            "";
 
           const sorted =
-            Object.values(players).sort(
+            Object.values(
+              players
+            ).sort(
               (a, b) => {
-                /*
-                 * En 1VS1 el orden se determina EXCLUSIVAMENTE
-                 * por rank.
-                 */
                 if (
-                  Object.keys(players).length === 2
+                  Object.keys(
+                    players
+                  ).length === 2
                 ) {
                   return (
-                    (a.rank ?? 999) -
-                    (b.rank ?? 999)
+                    (a.rank ??
+                      999) -
+                    (b.rank ??
+                      999)
                   );
                 }
 
-                /*
-                 * En partidas de más de 2 jugadores se mantiene
-                 * exactamente la lógica original.
-                 */
                 if (
                   a.won &&
                   b.won
@@ -2212,8 +2498,11 @@
                   );
                 }
 
-                if (a.won) return -1;
-                if (b.won) return 1;
+                if (a.won)
+                  return -1;
+
+                if (b.won)
+                  return 1;
 
                 if (
                   b.greens !==
@@ -2327,7 +2616,9 @@
             isReadyNextRound =
               !isReadyNextRound;
 
-            players[myId].readyNext =
+            players[
+              myId
+            ].readyNext =
               isReadyNextRound;
 
             els.btnPlayerReadyNext.textContent =
@@ -2380,3 +2671,4 @@
     </script>
   </body>
 </html>
+```
