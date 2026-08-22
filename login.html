@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Iniciar sesión - FiestaWordle</title>
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -12,27 +15,29 @@
 
   <form id="loginForm">
 
-    <div>
-      <label for="identifier">Usuario o email</label>
-      <input
-        type="text"
-        id="identifier"
-        required
-      >
-    </div>
+    <label for="email">
+      Usuario o email
+    </label>
 
-    <br>
+    <input
+      type="text"
+      id="email"
+      required
+    >
 
-    <div>
-      <label for="password">Contraseña</label>
-      <input
-        type="password"
-        id="password"
-        required
-      >
-    </div>
+    <br><br>
 
-    <br>
+    <label for="password">
+      Contraseña
+    </label>
+
+    <input
+      type="password"
+      id="password"
+      required
+    >
+
+    <br><br>
 
     <button type="submit">
       Iniciar sesión
@@ -40,50 +45,96 @@
 
   </form>
 
-  <p id="message"></p>
+  <p id="mensaje"></p>
 
   <script>
-    const form = document.getElementById("loginForm");
-    const message = document.getElementById("message");
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", async function(event) {
 
-      message.textContent = "Iniciando sesión...";
+        event.preventDefault();
 
-      const identifier =
-        document.getElementById("identifier").value;
+        const email = document
+          .getElementById("email")
+          .value;
 
-      const password =
-        document.getElementById("password").value;
+        const password = document
+          .getElementById("password")
+          .value;
 
-      try {
-        const response = await fetch("/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            identifier,
-            password
-          })
-        });
+        const mensaje = document
+          .getElementById("mensaje");
 
-        const data = await response.json();
+        try {
 
-        if (data.success) {
-          message.textContent =
-            "¡Bienvenido, " + data.user.username +
-            "! Elo: " + data.user.elo;
-        } else {
-          message.textContent = data.message;
+          const respuesta = await fetch("/api/login", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+
+          });
+
+          const data = await respuesta.json();
+
+          if (data.success) {
+
+            // Guardamos la sesión del usuario
+            localStorage.setItem(
+              "userId",
+              data.user.id
+            );
+
+            localStorage.setItem(
+              "username",
+              data.user.username
+            );
+
+            localStorage.setItem(
+              "elo",
+              data.user.elo
+            );
+
+            mensaje.textContent =
+              "¡Bienvenido, " +
+              data.user.username +
+              "! Elo: " +
+              data.user.elo;
+
+            // Esperamos 1,5 segundos y vamos al juego
+            setTimeout(function() {
+
+              window.location.href = "/";
+
+            }, 1500);
+
+          } else {
+
+            mensaje.textContent =
+              data.message ||
+              "Usuario o contraseña incorrectos";
+
+          }
+
+        } catch (error) {
+
+          console.error(error);
+
+          mensaje.textContent =
+            "Error al conectar con el servidor";
+
         }
 
-      } catch (error) {
-        console.error(error);
-        message.textContent = "Error conectando con el servidor";
-      }
-    });
+      });
+
   </script>
 
 </body>
