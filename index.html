@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Wordle Multijugador 1vs1</title>
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <style>
@@ -17,38 +17,55 @@
       --red: #e74c3c;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
+    * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Evita scroll molesto en móvil */
       background-color: var(--bg);
       color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      justify-content: flex-start;
       padding: 10px;
     }
 
     .hidden { display: none !important; }
 
-    /* Contenedor principal */
+    /* Layout Principal */
     .app-container {
       width: 100%;
-      max-width: 800px;
+      max-width: 900px;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    .status-bar {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-bottom: 5px;
+      text-align: center;
     }
 
     /* Pantalla Lobby */
     .lobby-card {
       background: var(--card-bg);
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 400px;
+      max-width: 360px;
       text-align: center;
-      margin-top: 20px;
+      margin-top: auto;
+      margin-bottom: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
 
     .input-group {
@@ -59,8 +76,8 @@
     }
 
     input[type="text"] {
-      padding: 10px;
-      border-radius: 4px;
+      padding: 12px;
+      border-radius: 6px;
       border: 1px solid var(--border);
       background: #272729;
       color: var(--text);
@@ -70,8 +87,8 @@
     }
 
     button {
-      padding: 10px 20px;
-      border-radius: 4px;
+      padding: 12px 20px;
+      border-radius: 6px;
       border: none;
       background: var(--green);
       color: white;
@@ -79,59 +96,77 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .players-list { margin: 15px 0; }
+    .players-list { margin: 15px 0; max-height: 150px; overflow-y: auto; }
     .player-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px;
+      padding: 10px;
       background: #272729;
-      margin-bottom: 5px;
-      border-radius: 4px;
+      margin-bottom: 6px;
+      border-radius: 6px;
+      font-size: 0.9rem;
     }
 
     .badge-ready { color: var(--green); font-weight: bold; }
     .badge-waiting { color: var(--yellow); font-weight: bold; }
-    .btn-kick { background: var(--red); padding: 4px 8px; font-size: 0.8rem; }
+    .btn-kick { background: var(--red); padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; }
 
-    /* Pantalla Juego */
+    /* Pantalla Juego Adaptativa */
     .game-container {
       display: flex;
       flex-direction: column;
-      align-items: center;
       width: 100%;
-      gap: 20px;
+      height: 100%;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    @media (min-width: 768px) {
-      .game-container {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: center;
-      }
+    .game-main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      flex: 1;
+      justify-content: center;
     }
 
-    .board { display: flex; flex-direction: column; gap: 5px; }
-    .board-row { display: flex; gap: 5px; }
+    /* Tablero Principal Responsivo */
+    .board {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .board-row {
+      display: flex;
+      gap: 4px;
+    }
 
     .tile-wrap {
       position: relative;
-      width: 50px;
-      height: 50px;
+      /* Escala flexible en función del alto de la pantalla */
+      width: min(13vw, 52px);
+      height: min(13vw, 52px);
+      max-width: 52px;
+      max-height: 52px;
     }
 
     .tile {
       width: 100%;
       height: 100%;
       border: 2px solid var(--border);
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
+      font-size: clamp(1.2rem, 5vw, 1.8rem);
       font-weight: bold;
       text-transform: uppercase;
+      user-select: none;
     }
 
     .tile.correct { background: var(--green); border-color: var(--green); }
@@ -144,36 +179,70 @@
       opacity: 0; cursor: pointer;
     }
 
-    /* Tableros Rivales */
+    /* Seccion Rivales */
+    .rivals-container {
+      width: 100%;
+      text-align: center;
+    }
+
     .rivals-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
+      margin-top: 4px;
     }
 
     .rival-card {
       background: var(--card-bg);
-      padding: 10px;
+      padding: 6px;
       border-radius: 6px;
     }
 
-    .board--rival .tile-wrap { width: 25px; height: 25px; }
-    .board--rival .tile { font-size: 0.8rem; border-width: 1px; }
+    .board--rival .tile-wrap {
+      width: min(5vw, 22px);
+      height: min(5vw, 22px);
+    }
+    .board--rival .tile {
+      font-size: 0.65rem;
+      border-width: 1px;
+    }
 
-    /* Teclado Virtual */
-    .keyboard { display: flex; flex-direction: column; gap: 6px; margin-top: 15px; }
-    .keyboard-row { display: flex; justify-content: center; gap: 4px; }
+    /* Teclado Virtual Móvil */
+    .keyboard {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 8px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      gap: 4px;
+    }
+
     .key-tile {
       background: var(--gray-tile);
-      padding: 10px 12px;
+      flex: 1;
+      height: 48px;
       border-radius: 4px;
       font-weight: bold;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
+      cursor: pointer;
     }
+
+    .key-tile.key-wide { flex: 1.5; font-size: 0.75rem; }
     .key-tile.correct { background: var(--green); }
     .key-tile.present { background: var(--yellow); }
-    .key-tile.absent { opacity: 0.4; }
+    .key-tile.absent { opacity: 0.3; }
 
     /* Modales / Overlays */
     .overlay {
@@ -185,32 +254,39 @@
       align-items: center;
       justify-content: center;
       z-index: 100;
+      padding: 20px;
     }
 
     .overlay-content {
       background: var(--card-bg);
-      padding: 30px;
-      border-radius: 8px;
+      padding: 24px;
+      border-radius: 12px;
       text-align: center;
-      max-width: 400px;
-      width: 90%;
+      max-width: 360px;
+      width: 100%;
     }
 
     .toast {
       position: fixed;
-      bottom: 20px;
+      top: 20px;
       background: white;
       color: black;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: 20px;
       font-weight: bold;
+      font-size: 0.9rem;
       z-index: 200;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    .status-bar {
-      margin-bottom: 10px;
-      font-size: 0.9rem;
-      opacity: 0.8;
+    /* Ajustes Escritorio */
+    @media (min-width: 768px) {
+      .game-main {
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+      }
     }
   </style>
 </head>
@@ -221,58 +297,61 @@
 
     <!-- PANTALLA DE LOBBY -->
     <div id="screen-lobby" class="lobby-card">
-      <h2>Wordle Multijugador</h2>
+      <h2 style="margin-bottom: 10px;">Wordle 1vs1</h2>
       
       <div id="lobby-setup" class="input-group">
-        <input type="text" id="input-name" placeholder="Tu Nombre" maxlength="12">
+        <input type="text" id="input-name" placeholder="TU NOMBRE" maxlength="12">
         <button id="btn-create-room">Crear Sala</button>
-        <hr style="border-color: var(--border); margin: 10px 0;">
-        <input type="text" id="input-room-code" placeholder="Código de Sala" maxlength="5">
+        <hr style="border-color: var(--border); margin: 5px 0;">
+        <input type="text" id="input-room-code" placeholder="CÓDIGO DE SALA" maxlength="5">
         <button id="btn-join-room">Unirse a Sala</button>
       </div>
 
       <div id="lobby-room" class="hidden">
-        <p>Código de sala: <strong id="room-code-display" style="color: var(--yellow); font-size: 1.2rem;"></strong></p>
-        <p id="lobby-msg" style="margin: 10px 0;"></p>
+        <p>Código: <strong id="room-code-display" style="color: var(--yellow); font-size: 1.2rem;"></strong></p>
+        <p id="lobby-msg" style="margin: 8px 0; font-size: 0.85rem;"></p>
         
         <div id="players-list" class="players-list"></div>
 
-        <button id="btn-ready">¡ESTOY LISTO!</button>
-        <button id="btn-start-game" class="hidden" disabled>EMPEZAR PARTIDA</button>
+        <button id="btn-ready" style="width: 100%;">¡ESTOY LISTO!</button>
+        <button id="btn-start-game" class="hidden" style="width: 100%; margin-top: 8px;" disabled>EMPEZAR PARTIDA</button>
       </div>
     </div>
 
     <!-- PANTALLA DE JUEGO -->
     <div id="screen-game" class="game-container hidden">
-      <div>
-        <div id="board-me" class="board"></div>
-        <div id="virtual-keyboard" class="keyboard"></div>
+      <div class="game-main">
+        <div>
+          <div id="board-me" class="board"></div>
+        </div>
+
+        <div class="rivals-container">
+          <h4 style="font-size: 0.85rem; opacity: 0.8;">RIVALES</h4>
+          <div id="rivals-grid" class="rivals-grid"></div>
+        </div>
       </div>
 
-      <div>
-        <h3>Rivales</h3>
-        <div id="rivals-grid" class="rivals-grid"></div>
-      </div>
+      <div id="virtual-keyboard" class="keyboard"></div>
     </div>
   </div>
 
   <!-- OVERLAY CONTEO REGRESIVO -->
   <div id="countdown-overlay" class="overlay hidden">
-    <h1 style="font-size: 5rem;" id="countdown-number">3</h1>
+    <h1 style="font-size: 6rem; color: var(--green);" id="countdown-number">3</h1>
   </div>
 
   <!-- OVERLAY RESULTADOS -->
   <div id="result-overlay" class="overlay hidden">
     <div class="overlay-content">
-      <h2>Fin de la Partida</h2>
-      <p style="margin: 10px 0;">La palabra era: <strong id="result-word" style="color: var(--green); text-transform: uppercase;"></strong></p>
+      <h3>Fin de la Partida</h3>
+      <p style="margin: 10px 0; font-size: 0.9rem;">Palabra: <strong id="result-word" style="color: var(--green); text-transform: uppercase;"></strong></p>
       
-      <div id="leaderboard" style="margin: 20px 0; text-align: left;"></div>
+      <div id="leaderboard" style="margin: 15px 0; text-align: left;"></div>
 
-      <p id="host-status-counter" class="hidden" style="margin-bottom: 10px;"></p>
-      <button id="btn-next-round" class="hidden">Siguiente Ronda</button>
-      <button id="btn-player-ready-next" class="hidden">Listo para otra ronda</button>
-      <button id="btn-back-lobby" style="background: var(--gray-tile); margin-top: 10px;">Salir al Lobby</button>
+      <p id="host-status-counter" class="hidden" style="margin-bottom: 10px; font-size: 0.85rem;"></p>
+      <button id="btn-next-round" class="hidden" style="width: 100%;">Siguiente Ronda</button>
+      <button id="btn-player-ready-next" class="hidden" style="width: 100%;">Listo para otra ronda</button>
+      <button id="btn-back-lobby" style="background: var(--gray-tile); margin-top: 8px; width: 100%;">Salir al Lobby</button>
     </div>
   </div>
 
@@ -285,7 +364,7 @@
       const KEYBOARD_LAYOUT = [
         ["Q","W","E","R","T","Y","U","I","O","P"],
         ["A","S","D","F","G","H","J","K","L","Ñ"],
-        ["Z","X","C","V","B","N","M"]
+        ["ENTER","Z","X","C","V","B","N","M","DEL"]
       ];
 
       let peer = null;
@@ -396,7 +475,7 @@
           setStatus("connected", "esperando rivales");
           updatePlayersUI();
         } catch (err) {
-          showToast("Error al crear la sala");
+          showToast("Error al crear sala");
         }
       });
 
@@ -404,7 +483,7 @@
         myName = els.inputName.value.trim();
         roomCode = els.inputRoomCode.value.trim().toUpperCase();
         if (!myName) return showToast("Introduce tu nombre");
-        if (!roomCode) return showToast("Introduce el código de sala");
+        if (!roomCode) return showToast("Código inválido");
 
         isHost = false;
         try {
@@ -420,7 +499,7 @@
       });
 
       function connectToPeer(targetId) {
-        els.lobbyMsg.textContent = "Conectando con la sala...";
+        els.lobbyMsg.textContent = "Conectando...";
         setStatus("connecting", "conectando");
         const conn = peer.connect(targetId);
         attachConnHandlers(conn);
@@ -435,10 +514,10 @@
           try { conn.close(); } catch (err) {}
           delete connections[conn.peer];
           if (isHost) {
-            els.lobbyMsg.textContent = "Un rival no pudo conectar, esperando nuevos jugadores...";
+            els.lobbyMsg.textContent = "Error al conectar con un rival";
             setStatus("connecting", "esperando rivales");
           } else {
-            els.lobbyMsg.textContent = "No se pudo conectar, verifica el código de la sala";
+            els.lobbyMsg.textContent = "No se pudo conectar a la sala";
             setStatus("", "sin conectar");
           }
         }, CONNECT_TIMEOUT_MS);
@@ -470,14 +549,13 @@
           updatePlayersUI();
           checkAllReady();
           updateHostCounter();
-          showToast("Un jugador se ha desconectado");
+          showToast("Un jugador ha salido");
         });
 
-        conn.on("error", (err) => {
+        conn.on("error", () => {
           settled = true;
           clearTimeout(timeoutId);
-          console.error(err);
-          showToast("Error en la conexión");
+          showToast("Error de conexión");
         });
       }
 
@@ -495,7 +573,7 @@
             break;
 
           case "kicked":
-            showToast("Has sido expulsado de la sala");
+            showToast("Has sido expulsado");
             setTimeout(() => location.reload(), 1500);
             break;
 
@@ -569,7 +647,6 @@
           broadcastList();
           checkAllReady();
           updateHostCounter();
-          showToast("Jugador expulsado");
         }, 200);
       }
 
@@ -581,11 +658,11 @@
           const showKick = isHost && id !== myId;
 
           item.innerHTML = `
-            <div class="player-info-group">
-              <span>${p.name} ${id === myId ? "<strong>(Tú)</strong>" : ""} ${id === PEER_PREFIX + roomCode ? "👑" : ""}</span>
+            <div>
+              <span>${p.name} ${id === myId ? "<strong>(Tú)</strong>" : ""}</span>
               ${showKick ? `<button class="btn-kick" data-kick="${id}">Expulsar</button>` : ""}
             </div>
-            <span class="player-badge ${p.ready ? "badge-ready" : "badge-waiting"}">
+            <span class="${p.ready ? "badge-ready" : "badge-waiting"}">
               ${p.ready ? "LISTO" : "ESPERANDO"}
             </span>
           `;
@@ -673,19 +750,14 @@
         buildMyBoard();
         buildVirtualKeyboard();
         buildRivalBoards();
-        focusTile(0, 0);
       }
 
       function buildMyBoard() {
         els.boardMe.innerHTML = "";
         for (let r = 0; r < 6; r++) {
-          const rowForm = document.createElement("form");
+          const rowForm = document.createElement("div");
           rowForm.className = "board-row";
           rowForm.dataset.row = r;
-          rowForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            submitGuess();
-          });
 
           for (let c = 0; c < 5; c++) {
             const wrap = document.createElement("div");
@@ -696,44 +768,7 @@
             const tile = document.createElement("div");
             tile.className = "tile";
 
-            const input = document.createElement("input");
-            input.type = "text";
-            input.className = "tile-native-input";
-            input.value = "";
-            input.setAttribute("autocomplete", "off");
-            input.setAttribute("autocorrect", "off");
-            input.setAttribute("autocapitalize", "characters");
-            input.setAttribute("enterkeyhint", "go");
-
-            input.addEventListener("focus", () => focusTile(r, c));
-
-            input.addEventListener("input", (e) => {
-              if (players[myId].finished) return;
-              const val = e.target.value.toUpperCase().replace(/[^A-ZÑ]/g, "");
-              if (val) {
-                setLetter(r, c, val.slice(-1));
-                if (c < 4) focusTile(r, c + 1);
-              }
-              input.value = "";
-            });
-
-            input.addEventListener("keydown", (e) => {
-              if (players[myId].finished) return;
-              if (e.key === "Enter" || e.keyCode === 13) {
-                e.preventDefault();
-                submitGuess();
-              } else if (e.key === "Backspace" || e.keyCode === 8) {
-                if (!rowBuffers[r][c] && c > 0) {
-                  focusTile(r, c - 1);
-                  setLetter(r, c - 1, "");
-                } else {
-                  setLetter(r, c, "");
-                }
-              }
-            });
-
             wrap.appendChild(tile);
-            wrap.appendChild(input);
             rowForm.appendChild(wrap);
           }
           els.boardMe.appendChild(rowForm);
@@ -748,12 +783,58 @@
           rowKeys.forEach((key) => {
             const keyDiv = document.createElement("div");
             keyDiv.className = "key-tile";
+            if (key === "ENTER" || key === "DEL") keyDiv.classList.add("key-wide");
             keyDiv.dataset.key = key;
             keyDiv.textContent = key;
+
+            // Soporte para interacción táctil rápida
+            keyDiv.addEventListener("pointerdown", (e) => {
+              e.preventDefault();
+              handleKeyPress(key);
+            });
+
             rowDiv.appendChild(keyDiv);
           });
           els.virtualKeyboard.appendChild(rowDiv);
         });
+
+        // Soporte teclado físico (PC)
+        window.removeEventListener("keydown", handlePhysicalKey);
+        window.addEventListener("keydown", handlePhysicalKey);
+      }
+
+      function handlePhysicalKey(e) {
+        if (players[myId]?.finished) return;
+        if (e.key === "Enter") handleKeyPress("ENTER");
+        else if (e.key === "Backspace") handleKeyPress("DEL");
+        else {
+          const key = e.key.toUpperCase();
+          if (/^[A-ZÑ]$/.test(key)) handleKeyPress(key);
+        }
+      }
+
+      function handleKeyPress(key) {
+        if (players[myId]?.finished) return;
+
+        if (key === "DEL") {
+          if (currentCol > 0) {
+            currentCol--;
+            setLetter(currentRow, currentCol, "");
+          }
+        } else if (key === "ENTER") {
+          submitGuess();
+        } else {
+          if (currentCol < 5) {
+            setLetter(currentRow, currentCol, key);
+            currentCol++;
+          }
+        }
+      }
+
+      function setLetter(r, c, letter) {
+        rowBuffers[r][c] = letter;
+        const wrap = els.boardMe.querySelector(`.tile-wrap[data-row="${r}"][data-col="${c}"]`);
+        if (wrap) wrap.querySelector(".tile").textContent = letter;
       }
 
       function updateVirtualKeyboard(word, pattern) {
@@ -779,24 +860,6 @@
         });
       }
 
-      function focusTile(r, c) {
-        if (r !== currentRow || players[myId].finished) return;
-        currentCol = c;
-        document.querySelectorAll(".tile-wrap").forEach((w) => w.classList.remove("focused"));
-        const wrap = els.boardMe.querySelector(`.tile-wrap[data-row="${r}"][data-col="${c}"]`);
-        if (wrap) {
-          wrap.classList.add("focused");
-          const inp = wrap.querySelector(".tile-native-input");
-          if (document.activeElement !== inp) inp.focus();
-        }
-      }
-
-      function setLetter(r, c, letter) {
-        rowBuffers[r][c] = letter;
-        const wrap = els.boardMe.querySelector(`.tile-wrap[data-row="${r}"][data-col="${c}"]`);
-        if (wrap) wrap.querySelector(".tile").textContent = letter;
-      }
-
       function buildRivalBoards() {
         els.rivalsGrid.innerHTML = "";
         Object.entries(players).forEach(([id, p]) => {
@@ -806,7 +869,7 @@
           card.className = "rival-card";
           card.id = `rival-card-${id}`;
           card.innerHTML = `
-            <div class="rival-header" style="display:flex; justify-space-between; margin-bottom: 5px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 2px; font-size:0.75rem;">
               <span>${p.name}</span>
               <span id="rival-att-${id}">0/6</span>
             </div>
@@ -846,7 +909,7 @@
         if (players[myId].finished) return;
 
         const word = rowBuffers[currentRow].join("");
-        if (word.length < 5) return showToast("Completa las 5 letras");
+        if (word.length < 5) return showToast("Faltan letras");
 
         const pattern = evaluateGuess(word, secretWord);
         paintRow(currentRow, pattern);
@@ -905,11 +968,10 @@
           });
 
           showToast("Has agotado tus intentos");
-          if (document.activeElement) document.activeElement.blur();
           checkGameEnd();
         } else {
           currentRow++;
-          focusTile(currentRow, 0);
+          currentCol = 0;
         }
       }
 
@@ -947,7 +1009,6 @@
         const totalPlayers = Object.keys(players).length;
         const pList = Object.values(players);
 
-        // Lógica optimizada 1vs1 (2 jugadores)
         if (totalPlayers === 2) {
           const winnerExists = pList.some((p) => p.won);
           const allFinished = pList.every((p) => p.finished);
@@ -958,7 +1019,6 @@
           }
         }
 
-        // Lógica para más de 2 jugadores
         const winners = pList.filter((p) => p.won).length;
         if (finishedCount >= totalPlayers || (totalPlayers - finishedCount === 1 && winners === totalPlayers - 1)) {
           setTimeout(showFinalResults, 800);
@@ -969,7 +1029,7 @@
         if (!isHost) return;
         const nonHostPlayers = Object.entries(players).filter(([id]) => id !== myId);
         const readyCount = nonHostPlayers.filter(([, p]) => p.readyNext).length;
-        els.hostStatusCounter.textContent = `Listos para otra ronda: ${readyCount}/${nonHostPlayers.length}`;
+        els.hostStatusCounter.textContent = `Listos otra ronda: ${readyCount}/${nonHostPlayers.length}`;
       }
 
       function showFinalResults() {
@@ -978,14 +1038,9 @@
         els.leaderboard.innerHTML = "";
 
         const sorted = Object.values(players).sort((a, b) => {
-          // 1. Gana quien haya acertado la palabra
           if (a.won && !b.won) return -1;
           if (!a.won && b.won) return 1;
-
-          // 2. Si ambos acertaron, gana el de mejor posición (menor tiempo/intentos)
           if (a.won && b.won) return a.rank - b.rank;
-
-          // 3. Si ninguno la acertó, desempate por aciertos (verdes, amarillos y tiempo)
           if (b.greens !== a.greens) return b.greens - a.greens;
           if (b.yellows !== a.yellows) return b.yellows - a.yellows;
           return a.finishTime - b.finishTime;
@@ -1008,9 +1063,9 @@
           item.innerHTML = `
             <div>
               <span style="font-weight:700;">${p.name}</span>
-              <div style="font-size: 0.8rem; opacity: 0.8;">
+              <div style="font-size: 0.75rem; opacity: 0.8;">
                 <span>🟩 ${p.greens}</span>
-                <span style="margin-left:8px;">🟨 ${p.yellows}</span>
+                <span style="margin-left:6px;">🟨 ${p.yellows}</span>
               </div>
             </div>
             <strong style="color:${statusColor}">${statusText}</strong>
@@ -1035,7 +1090,7 @@
         players[myId].readyNext = isReadyNextRound;
 
         els.btnPlayerReadyNext.textContent = isReadyNextRound
-          ? "Esperando a que empiece..."
+          ? "Esperando inicio..."
           : "Listo para otra ronda";
         els.btnPlayerReadyNext.style.background = isReadyNextRound
           ? "var(--gray-tile)"
