@@ -10,7 +10,19 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { identifier, password } = req.body;
+    let body = req.body;
+
+    // Por seguridad, si Vercel recibe el body como texto
+    if (typeof body === "string") {
+      body = JSON.parse(body);
+    }
+
+    const identifier =
+      body?.identifier ||
+      body?.email ||
+      body?.username;
+
+    const password = body?.password;
 
     if (!identifier || !password) {
       return res.status(400).json({
