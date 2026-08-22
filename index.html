@@ -7,12 +7,14 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1"
     />
     <title>DUELO · Wordle Multijugador (Hasta 7)</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700;800&display=swap"
       rel="stylesheet"
     />
+
     <style>
       :root {
         --ink: #14110f;
@@ -329,7 +331,6 @@
         text-align: center;
       }
 
-      /* JUEGO */
       .screen-game {
         padding: 16px;
         display: flex;
@@ -427,7 +428,6 @@
         opacity: 0.5;
       }
 
-      /* TECLADO VIRTUAL INFORMATIVO */
       .keyboard {
         display: flex;
         flex-direction: column;
@@ -496,7 +496,6 @@
         border-width: 1px;
       }
 
-      /* OVERLAY CUENTA ATRÁS */
       .countdown-overlay {
         position: fixed;
         inset: 0;
@@ -521,12 +520,10 @@
           transform: scale(0.6);
           opacity: 0.3;
         }
-
         50% {
           transform: scale(1.1);
           opacity: 1;
         }
-
         100% {
           transform: scale(1);
           opacity: 1;
@@ -639,7 +636,6 @@
     </header>
 
     <main id="app">
-      <!-- LOBBY -->
       <section id="screen-lobby" class="screen screen-lobby">
         <div class="lobby-hero">
           <h1>Wordle Multijugador</h1>
@@ -657,9 +653,8 @@
               display: block;
               margin-bottom: 6px;
             "
+            >TU NOMBRE</label
           >
-            TU NOMBRE
-          </label>
 
           <input
             id="userNameInput"
@@ -689,9 +684,7 @@
               placeholder="Código (4 dígitos)"
             />
 
-            <button id="btnJoin" class="btn btn-secondary">
-              Entrar
-            </button>
+            <button id="btnJoin" class="btn btn-secondary">Entrar</button>
           </div>
         </div>
 
@@ -705,17 +698,16 @@
               align-items: center;
             "
           >
-            <span style="font-size: 0.8rem; color: var(--text-dim)">
-              CÓDIGO DE SALA:
-            </span>
+            <span style="font-size: 0.8rem; color: var(--text-dim)"
+              >CÓDIGO DE SALA:</span
+            >
 
             <span
               id="roomCodeDisplay"
               class="code-display"
               title="Toca para copiar"
+              >----</span
             >
-              ----
-            </span>
           </div>
 
           <div class="players-list" id="playersList"></div>
@@ -730,13 +722,11 @@
         </div>
       </section>
 
-      <!-- JUEGO -->
       <section id="screen-game" class="screen screen-game hidden">
         <div class="arena">
           <div class="my-area">
             <div id="boardMe" class="board"></div>
 
-            <!-- TECLADO VIRTUAL INFORMATIVO -->
             <div id="virtualKeyboard" class="keyboard"></div>
           </div>
 
@@ -758,17 +748,11 @@
           Fin de la Partida
         </h2>
 
-        <p
-          style="
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-          "
-        >
+        <p style="margin: 0; font-size: 0.85rem; color: var(--text-dim)">
           La palabra era:
-          <strong id="resultWord" style="color: var(--accent-soft)">
-            —
-          </strong>
+          <strong id="resultWord" style="color: var(--accent-soft)"
+            >—</strong
+          >
         </p>
 
         <div class="leaderboard" id="leaderboard"></div>
@@ -782,10 +766,7 @@
             Jugar otra ronda
           </button>
 
-          <button
-            id="btnPlayerReadyNext"
-            class="btn btn-ready hidden"
-          >
+          <button id="btnPlayerReadyNext" class="btn btn-ready hidden">
             Listo para otra ronda
           </button>
 
@@ -802,407 +783,57 @@
 
     <script>
       const WORDS = [
-        "ABRIR",
-        "ACTOR",
-        "AGUDO",
-        "AGUJA",
-        "ALGAS",
-        "ALTAR",
-        "ALZAR",
-        "AMIGO",
-        "ANCHO",
-        "ANDAR",
-        "ANIMO",
-        "ANTES",
-        "APOYO",
-        "ARBOL",
-        "ARDER",
-        "ARENA",
-        "ARMAR",
-        "ARROZ",
-        "ASADO",
-        "ATLAS",
-        "AUDIO",
-        "AUTOR",
-        "AVISO",
-        "AYUDA",
-        "AZOTE",
-        "BAILE",
-        "BAJAR",
-        "BALSA",
-        "BANCO",
-        "BARCO",
-        "BASTA",
-        "BATIR",
-        "BEBER",
-        "BESAR",
-        "BICHO",
-        "BOCAS",
-        "BOLSA",
-        "BOTON",
-        "BRAZO",
-        "BRISA",
-        "BURLA",
-        "BUSCA",
-        "CABLE",
-        "CAJON",
-        "CALLE",
-        "CALOR",
-        "CAMPO",
-        "CANAL",
-        "CANTO",
-        "CAPAZ",
-        "CARGA",
-        "CARNE",
-        "CARRO",
-        "CARTA",
-        "CASAS",
-        "CASCO",
-        "CAUSA",
-        "CEDER",
-        "CENAR",
-        "CERCA",
-        "CERDO",
-        "CIELO",
-        "CIFRA",
-        "CINCO",
-        "CLARO",
-        "CLAVE",
-        "CLIMA",
-        "COCHE",
-        "CODOS",
-        "COLOR",
-        "COMER",
-        "COMUN",
-        "COPAS",
-        "CORAL",
-        "CORTE",
-        "COSAS",
-        "COSTA",
-        "CREAR",
-        "CRECE",
-        "CREER",
-        "CRUDO",
-        "CUBOS",
-        "CUERO",
-        "CUEVA",
-        "CUIDA",
-        "CULPA",
-        "CUOTA",
-        "CURAR",
-        "DEBER",
-        "DEJAR",
-        "DENSO",
-        "DESEO",
-        "DIGNO",
-        "DIOSA",
-        "DOBLE",
-        "DOLOR",
-        "DONDE",
-        "DUCHA",
-        "DUDAR",
-        "DULCE",
-        "DUROS",
-        "ELITE",
-        "ENANO",
-        "ENTRE",
-        "EQUIS",
-        "ERROR",
-        "ESPIA",
-        "ESTAR",
-        "EXITO",
-        "FALSO",
-        "FALTA",
-        "FECHA",
-        "FELIZ",
-        "FIBRA",
-        "FILAS",
-        "FINCA",
-        "FIRME",
-        "FLACO",
-        "FLOTA",
-        "FONDO",
-        "FORMA",
-        "FRASE",
-        "FRENO",
-        "FRESA",
-        "FRIOS",
-        "FRUTA",
-        "FUEGO",
-        "FUERA",
-        "FUGAZ",
-        "GALAS",
-        "GALLO",
-        "GANAR",
-        "GATOS",
-        "GENIO",
-        "GENTE",
-        "GESTO",
-        "GIRAR",
-        "GLOBO",
-        "GOLPE",
-        "GORDO",
-        "GORRA",
-        "GOTAS",
-        "GRAVE",
-        "GRITO",
-        "GRUPO",
-        "GUIAR",
-        "GUSTO",
-        "HABLA",
-        "HACER",
-        "HELAR",
-        "HIELO",
-        "HOGAR",
-        "HOJAS",
-        "HONOR",
-        "HORAS",
-        "HORNO",
-        "HUECO",
-        "HUEVO",
-        "HUMOR",
-        "IDEAS",
-        "IGUAL",
-        "IMPAR",
-        "ISLAS",
-        "JABON",
-        "JAMAS",
-        "JEFES",
-        "JOVEN",
-        "JUEGO",
-        "JUGAR",
-        "JUNTO",
-        "JUSTO",
-        "LABIO",
-        "LADOS",
-        "LARGO",
-        "LEGAL",
-        "LENTO",
-        "LETRA",
-        "LIBRE",
-        "LIBRO",
-        "LIGAR",
-        "LIMON",
-        "LINEA",
-        "LISTO",
-        "LLAMA",
-        "LLAVE",
-        "LOCAL",
-        "LOCOS",
-        "LOGRO",
-        "LUCHA",
-        "LUGAR",
-        "LUNAS",
-        "MADRE",
-        "MALLA",
-        "MANOS",
-        "MAPAS",
-        "MARCO",
-        "MAREA",
-        "MARZO",
-        "MASAS",
-        "MAYOR",
-        "MEDIA",
-        "MEDIO",
-        "MENOR",
-        "MENTE",
-        "MESAS",
-        "METAL",
-        "MIEDO",
-        "MIRAR",
-        "MISMO",
-        "MODAS",
-        "MOLDE",
-        "MONTE",
-        "MORIR",
-        "MOTOR",
-        "MOVER",
-        "MUJER",
-        "MUNDO",
-        "MUROS",
-        "MUSEO",
-        "NADAR",
-        "NARIZ",
-        "NEGAR",
-        "NEGRO",
-        "NIETO",
-        "NIEVE",
-        "NOBLE",
-        "NOCHE",
-        "NORTE",
-        "NOTAS",
-        "NOVIA",
-        "NUBES",
-        "NUEVE",
-        "NUEVO",
-        "OBRAS",
-        "OCASO",
-        "OJALA",
-        "OLIVA",
-        "OLLAS",
-        "OPERA",
-        "ORDEN",
-        "OREJA",
-        "OZONO",
-        "PADRE",
-        "PAGAR",
-        "PALMA",
-        "PANEL",
-        "PAPEL",
-        "PARAR",
-        "PARED",
-        "PARTE",
-        "PASAR",
-        "PASEO",
-        "PATIO",
-        "PAVOR",
-        "PELEA",
-        "PELOS",
-        "PERLA",
-        "PERRO",
-        "PESAR",
-        "PESCA",
-        "PICAR",
-        "PIEZA",
-        "PILAR",
-        "PISAR",
-        "PISOS",
-        "PLATO",
-        "PLAYA",
-        "PLAZA",
-        "PLENO",
-        "PLUMA",
-        "POBRE",
-        "POCOS",
-        "PODER",
-        "POLLO",
-        "PONER",
-        "POSTE",
-        "PRADO",
-        "PRESA",
-        "PRIMO",
-        "PULGA",
-        "PUNTA",
-        "PUNTO",
-        "QUESO",
-        "RABIA",
-        "RAMAS",
-        "RAMPA",
-        "RANAS",
-        "RATON",
-        "RAYOS",
-        "REGLA",
-        "REINA",
-        "RELOJ",
-        "RESTO",
-        "REYES",
-        "RICAS",
-        "RIEGO",
-        "RIMAS",
-        "RITMO",
-        "RIVAL",
-        "RIZAR",
-        "ROBAR",
-        "ROBLE",
-        "ROCAS",
-        "RODAR",
-        "ROJOS",
-        "ROLLO",
-        "RONDA",
-        "ROPAS",
-        "ROSAS",
-        "RUEDA",
-        "RUIDO",
-        "RUINA",
-        "RUMBO",
-        "SABIO",
-        "SABOR",
-        "SALIR",
-        "SALON",
-        "SALSA",
-        "SALTO",
-        "SALUD",
-        "SANAR",
-        "SANTO",
-        "SECAR",
-        "SECOS",
-        "SELVA",
-        "SENDA",
-        "SERIE",
-        "SERIO",
-        "SIETE",
-        "SIGLO",
-        "SILLA",
-        "SITIO",
-        "SOBRE",
-        "SOCIO",
-        "SOLES",
-        "SONAR",
-        "SOPAS",
-        "SUAVE",
-        "SUBIR",
-        "SUELO",
-        "SUMAR",
-        "SUPER",
-        "TABLA",
-        "TALLA",
-        "TANTO",
-        "TAPAR",
-        "TARDE",
-        "TAZAS",
-        "TECHO",
-        "TELAS",
-        "TEMOR",
-        "TENIS",
-        "TERSO",
-        "TESIS",
-        "TIGRE",
-        "TINTA",
-        "TIRAR",
-        "TODOS",
-        "TOMAR",
-        "TONTO",
-        "TORRE",
-        "TOTAL",
-        "TRAJE",
-        "TRATO",
-        "TRIGO",
-        "TRIPA",
-        "TRONO",
-        "TROZO",
-        "TUBOS",
-        "TURNO",
-        "UNIDO",
-        "USUAL",
-        "VACAS",
-        "VACIO",
-        "VALLE",
-        "VAPOR",
-        "VARON",
-        "VASOS",
-        "VECES",
-        "VELAR",
-        "VELOZ",
-        "VENIR",
-        "VENTA",
-        "VERDE",
-        "VERSO",
-        "VIAJE",
-        "VIDAS",
-        "VIEJO",
-        "VIGOR",
-        "VINOS",
-        "VIRUS",
-        "VISTA",
-        "VIUDA",
-        "VIVIR",
-        "VIVOS",
-        "VOCAL",
-        "VOLAR",
-        "VUELO",
-        "YEGUA",
-        "ZONAS",
-        "ZORRO",
+        "ABRIR","ACTOR","AGUDO","AGUJA","ALGAS","ALTAR","ALZAR","AMIGO",
+        "ANCHO","ANDAR","ANIMO","ANTES","APOYO","ARBOL","ARDER","ARENA",
+        "ARMAR","ARROZ","ASADO","ATLAS","AUDIO","AUTOR","AVISO","AYUDA",
+        "AZOTE","BAILE","BAJAR","BALSA","BANCO","BARCO","BASTA","BATIR",
+        "BEBER","BESAR","BICHO","BOCAS","BOLSA","BOTON","BRAZO","BRISA",
+        "BURLA","BUSCA","CABLE","CAJON","CALLE","CALOR","CAMPO","CANAL",
+        "CANTO","CAPAZ","CARGA","CARNE","CARRO","CARTA","CASAS","CASCO",
+        "CAUSA","CEDER","CENAR","CERCA","CERDO","CIELO","CIFRA","CINCO",
+        "CLARO","CLAVE","CLIMA","COCHE","CODOS","COLOR","COMER","COMUN",
+        "COPAS","CORAL","CORTE","COSAS","COSTA","CREAR","CRECE","CREER",
+        "CRUDO","CUBOS","CUERO","CUEVA","CUIDA","CULPA","CUOTA","CURAR",
+        "DEBER","DEJAR","DENSO","DESEO","DIGNO","DIOSA","DOBLE","DOLOR",
+        "DONDE","DUCHA","DUDAR","DULCE","DUROS","ELITE","ENANO","ENTRE",
+        "EQUIS","ERROR","ESPIA","ESTAR","EXITO","FALSO","FALTA","FECHA",
+        "FELIZ","FIBRA","FILAS","FINCA","FIRME","FLACO","FLOTA","FONDO",
+        "FORMA","FRASE","FRENO","FRESA","FRIOS","FRUTA","FUEGO","FUERA",
+        "FUGAZ","GALAS","GALLO","GANAR","GATOS","GENIO","GENTE","GESTO",
+        "GIRAR","GLOBO","GOLPE","GORDO","GORRA","GOTAS","GRAVE","GRITO",
+        "GRUPO","GUIAR","GUSTO","HABLA","HACER","HELAR","HIELO","HOGAR",
+        "HOJAS","HONOR","HORAS","HORNO","HUECO","HUEVO","HUMOR","IDEAS",
+        "IGUAL","IMPAR","ISLAS","JABON","JAMAS","JEFES","JOVEN","JUEGO",
+        "JUGAR","JUNTO","JUSTO","LABIO","LADOS","LARGO","LEGAL","LENTO",
+        "LETRA","LIBRE","LIBRO","LIGAR","LIMON","LINEA","LISTO","LLAMA",
+        "LLAVE","LOCAL","LOCOS","LOGRO","LUCHA","LUGAR","LUNAS","MADRE",
+        "MALLA","MANOS","MAPAS","MARCO","MAREA","MARZO","MASAS","MAYOR",
+        "MEDIA","MEDIO","MENOR","MENTE","MESAS","METAL","MIEDO","MIRAR",
+        "MISMO","MODAS","MOLDE","MONTE","MORIR","MOTOR","MOVER","MUJER",
+        "MUNDO","MUROS","MUSEO","NADAR","NARIZ","NEGAR","NEGRO","NIETO",
+        "NIEVE","NOBLE","NOCHE","NORTE","NOTAS","NOVIA","NUBES","NUEVE",
+        "NUEVO","OBRAS","OCASO","OJALA","OLIVA","OLLAS","OPERA","ORDEN",
+        "OREJA","OZONO","PADRE","PAGAR","PALMA","PANEL","PAPEL","PARAR",
+        "PARED","PARTE","PASAR","PASEO","PATIO","PAVOR","PELEA","PELOS",
+        "PERLA","PERRO","PESAR","PESCA","PICAR","PIEZA","PILAR","PISAR",
+        "PISOS","PLATO","PLAYA","PLAZA","PLENO","PLUMA","POBRE","POCOS",
+        "PODER","POLLO","PONER","POSTE","PRADO","PRESA","PRIMO","PULGA",
+        "PUNTA","PUNTO","QUESO","RABIA","RAMAS","RAMPA","RANAS","RATON",
+        "RAYOS","REGLA","REINA","RELOJ","RESTO","REYES","RICAS","RIEGO",
+        "RIMAS","RITMO","RIVAL","RIZAR","ROBAR","ROBLE","ROCAS","RODAR",
+        "ROJOS","ROLLO","RONDA","ROPAS","ROSAS","RUEDA","RUIDO","RUINA",
+        "RUMBO","SABIO","SABOR","SALIR","SALON","SALSA","SALTO","SALUD",
+        "SANAR","SANTO","SECAR","SECOS","SELVA","SENDA","SERIE","SERIO",
+        "SIETE","SIGLO","SILLA","SITIO","SOBRE","SOCIO","SOLES","SONAR",
+        "SOPAS","SUAVE","SUBIR","SUELO","SUMAR","SUPER","TABLA","TALLA",
+        "TANTO","TAPAR","TARDE","TAZAS","TECHO","TELAS","TEMOR","TENIS",
+        "TERSO","TESIS","TIGRE","TINTA","TIRAR","TODOS","TOMAR","TONTO",
+        "TORRE","TOTAL","TRAJE","TRATO","TRIGO","TRIPA","TRONO","TROZO",
+        "TUBOS","TURNO","UNIDO","USUAL","VACAS","VACIO","VALLE","VAPOR",
+        "VARON","VASOS","VECES","VELAR","VELOZ","VENIR","VENTA","VERDE",
+        "VERSO","VIAJE","VIDAS","VIEJO","VIGOR","VINOS","VIRUS","VISTA",
+        "VIUDA","VIVIR","VIVOS","VOCAL","VOLAR","VUELO","YEGUA","ZONAS",
+        "ZORRO"
       ];
 
       const ICE_SERVERS = [
@@ -1259,9 +890,7 @@
           leaderboard: document.getElementById("leaderboard"),
           hostStatusCounter: document.getElementById("hostStatusCounter"),
           btnNextRound: document.getElementById("btnNextRound"),
-          btnPlayerReadyNext: document.getElementById(
-            "btnPlayerReadyNext"
-          ),
+          btnPlayerReadyNext: document.getElementById("btnPlayerReadyNext"),
           btnBackLobby: document.getElementById("btnBackLobby"),
           toast: document.getElementById("toast"),
         };
@@ -1322,8 +951,7 @@
         function getValidName() {
           const val =
             els.userNameInput.value.trim() ||
-            "Jugador_" +
-              Math.floor(1000 + Math.random() * 9000);
+            "Jugador_" + Math.floor(1000 + Math.random() * 9000);
 
           localStorage.setItem("duelo_nickname", val);
 
@@ -1331,9 +959,7 @@
         }
 
         function generate4DigitCode() {
-          return Math.floor(
-            1000 + Math.random() * 9000
-          ).toString();
+          return Math.floor(1000 + Math.random() * 9000).toString();
         }
 
         els.btnHost.addEventListener("click", async () => {
@@ -1341,6 +967,7 @@
           roomCode = generate4DigitCode();
           myId = PEER_PREFIX + roomCode;
           isHost = true;
+
           initPeer(myId);
         });
 
@@ -1355,49 +982,33 @@
           roomCode = code;
           isHost = false;
           myId =
-            PEER_PREFIX +
-            Math.floor(100000 + Math.random() * 900000);
+            PEER_PREFIX + Math.floor(100000 + Math.random() * 900000);
 
-          initPeer(
-            myId,
-            PEER_PREFIX + roomCode
-          );
+          initPeer(myId, PEER_PREFIX + roomCode);
         });
 
         function initPeer(id, hostToConnect = null) {
           setStatus("connecting", "generando código");
-          els.lobbyMsg.textContent =
-            "Conectando al servidor...";
+          els.lobbyMsg.textContent = "Conectando al servidor...";
 
           peer = new Peer(id, {
             debug: 1,
-            config: {
-              iceServers: ICE_SERVERS,
-            },
+            config: { iceServers: ICE_SERVERS },
           });
 
           peer.on("open", () => {
-            setStatus(
-              "connecting",
-              "esperando rivales"
-            );
-
+            setStatus("connecting", "esperando rivales");
             els.lobbyMsg.textContent = "";
 
             els.setupPanels.classList.add("hidden");
             els.roomArea.classList.remove("hidden");
-
-            els.roomCodeDisplay.textContent =
-              roomCode;
+            els.roomCodeDisplay.textContent = roomCode;
 
             if (isHost) {
-              els.btnStartGame.classList.remove(
-                "hidden"
-              );
+              els.btnStartGame.classList.remove("hidden");
             }
 
-            players[myId] =
-              createPlayerData(myName);
+            players[myId] = createPlayerData(myName);
 
             updatePlayersUI();
 
@@ -1414,7 +1025,6 @@
             console.error(err);
 
             showToast("Error de conexión");
-
             setStatus("", "error");
 
             els.lobbyMsg.textContent =
@@ -1438,13 +1048,8 @@
         }
 
         function connectToPeer(targetId) {
-          els.lobbyMsg.textContent =
-            "Conectando con la sala...";
-
-          setStatus(
-            "connecting",
-            "conectando"
-          );
+          els.lobbyMsg.textContent = "Conectando con la sala...";
+          setStatus("connecting", "conectando");
 
           const conn = peer.connect(targetId);
 
@@ -1469,18 +1074,12 @@
               els.lobbyMsg.textContent =
                 "Un rival no pudo conectar, esperando nuevos jugadores...";
 
-              setStatus(
-                "connecting",
-                "esperando rivales"
-              );
+              setStatus("connecting", "esperando rivales");
             } else {
               els.lobbyMsg.textContent =
                 "No se pudo conectar, verifica el código de la sala";
 
-              setStatus(
-                "",
-                "sin conectar"
-              );
+              setStatus("", "sin conectar");
             }
           }, CONNECT_TIMEOUT_MS);
 
@@ -1492,21 +1091,15 @@
 
             if (
               isHost &&
-              Object.keys(players).length >=
-                MAX_PLAYERS
+              Object.keys(players).length >= MAX_PLAYERS
             ) {
               conn.send({ type: "full" });
               conn.close();
               return;
             }
 
-            els.lobbyMsg.textContent =
-              "¡Jugador conectado!";
-
-            setStatus(
-              "connected",
-              "conectado"
-            );
+            els.lobbyMsg.textContent = "¡Jugador conectado!";
+            setStatus("connected", "conectado");
 
             connections[conn.peer] = conn;
 
@@ -1517,10 +1110,7 @@
           });
 
           conn.on("data", (data) => {
-            handleData(
-              conn.peer,
-              data
-            );
+            handleData(conn.peer, data);
           });
 
           conn.on("close", () => {
@@ -1534,9 +1124,7 @@
             checkAllReady();
             updateHostCounter();
 
-            showToast(
-              "Un jugador se ha desconectado"
-            );
+            showToast("Un jugador se ha desconectado");
           });
 
           conn.on("error", (err) => {
@@ -1544,49 +1132,36 @@
             clearTimeout(timeoutId);
 
             console.error(err);
-
-            showToast(
-              "Error en la conexión"
-            );
+            showToast("Error en la conexión");
           });
         }
 
         function broadcast(data) {
-          Object.values(connections).forEach(
-            (c) => {
-              if (c.open) {
-                c.send(data);
-              }
+          Object.values(connections).forEach((c) => {
+            if (c.open) {
+              c.send(data);
             }
-          );
+          });
         }
 
         function handleData(senderId, data) {
           switch (data.type) {
             case "full":
-              showToast(
-                "La sala está llena (máximo 7 jugadores)"
-              );
-
+              showToast("La sala está llena (máximo 7 jugadores)");
               location.reload();
               break;
 
             case "kicked":
-              showToast(
-                "Has sido expulsado de la sala"
-              );
+              showToast("Has sido expulsado de la sala");
 
-              setTimeout(
-                () => location.reload(),
-                1500
-              );
+              setTimeout(() => {
+                location.reload();
+              }, 1500);
+
               break;
 
             case "join":
-              players[senderId] =
-                createPlayerData(
-                  data.name
-                );
+              players[senderId] = createPlayerData(data.name);
 
               updatePlayersUI();
 
@@ -1605,8 +1180,7 @@
 
             case "ready":
               if (players[senderId]) {
-                players[senderId].ready =
-                  data.ready;
+                players[senderId].ready = data.ready;
               }
 
               updatePlayersUI();
@@ -1616,8 +1190,7 @@
 
             case "ready-next":
               if (players[senderId]) {
-                players[senderId].readyNext =
-                  data.readyNext;
+                players[senderId].readyNext = data.readyNext;
               }
 
               if (isHost) {
@@ -1629,19 +1202,16 @@
 
             case "start-countdown":
               secretWord = data.word;
+
               startCountdown();
+
               break;
 
             case "guess":
               if (players[senderId]) {
-                players[senderId].row =
-                  data.row + 1;
-
-                players[senderId].greens =
-                  data.greens;
-
-                players[senderId].yellows =
-                  data.yellows;
+                players[senderId].row = data.row + 1;
+                players[senderId].greens = data.greens;
+                players[senderId].yellows = data.yellows;
 
                 updateRivalBoard(
                   senderId,
@@ -1654,28 +1224,35 @@
 
             case "finish":
               if (players[senderId]) {
-                players[senderId].finished =
-                  true;
-
-                players[senderId].won =
-                  data.won;
-
-                players[senderId].rank =
-                  data.rank;
-
-                players[senderId].greens =
-                  data.greens;
-
-                players[senderId].yellows =
-                  data.yellows;
-
-                players[senderId].finishTime =
-                  data.finishTime;
+                players[senderId].finished = true;
+                players[senderId].won = data.won;
+                players[senderId].rank = data.rank;
+                players[senderId].greens = data.greens;
+                players[senderId].yellows = data.yellows;
+                players[senderId].finishTime = data.finishTime;
 
                 finishedCount++;
 
                 if (data.won) {
                   winnerCount++;
+                }
+
+                /*
+                 * =====================================================
+                 * CAMBIO 1VS1
+                 * =====================================================
+                 *
+                 * Si estamos en un duelo 1vs1 y el rival se queda sin
+                 * intentos, NO usamos verdes/amarillas para decidir.
+                 *
+                 * El jugador que se queda sin intentos pierde.
+                 * El otro jugador gana automáticamente.
+                 */
+                if (
+                  Object.keys(players).length === 2 &&
+                  !data.won
+                ) {
+                  resolveDuelLoss(senderId);
                 }
 
                 checkGameEnd();
@@ -1693,12 +1270,7 @@
         }
 
         function kickPlayer(targetId) {
-          if (
-            !isHost ||
-            !connections[targetId]
-          ) {
-            return;
-          }
+          if (!isHost || !connections[targetId]) return;
 
           connections[targetId].send({
             type: "kicked",
@@ -1717,222 +1289,157 @@
             checkAllReady();
             updateHostCounter();
 
-            showToast(
-              "Jugador expulsado"
-            );
+            showToast("Jugador expulsado");
           }, 200);
         }
 
         function updatePlayersUI() {
           els.playersList.innerHTML = "";
 
-          Object.entries(players).forEach(
-            ([id, p]) => {
-              const item =
-                document.createElement(
-                  "div"
-                );
+          Object.entries(players).forEach(([id, p]) => {
+            const item = document.createElement("div");
 
-              item.className =
-                "player-item";
+            item.className = "player-item";
 
-              const showKick =
-                isHost && id !== myId;
+            const showKick = isHost && id !== myId;
 
-              item.innerHTML = `
-                <div class="player-info-group">
-                  <span>
-                    ${p.name}
-                    ${
-                      id === myId
-                        ? "<strong>(Tú)</strong>"
-                        : ""
-                    }
-                    ${
-                      id ===
-                      PEER_PREFIX +
-                        roomCode
-                        ? "👑"
-                        : ""
-                    }
-                  </span>
-
-                  ${
-                    showKick
-                      ? `<button class="btn-kick" data-kick="${id}">Expulsar</button>`
-                      : ""
-                  }
-                </div>
-
-                <span class="player-badge ${
-                  p.ready
-                    ? "badge-ready"
-                    : "badge-waiting"
-                }">
-                  ${
-                    p.ready
-                      ? "LISTO"
-                      : "ESPERANDO"
-                  }
+            item.innerHTML = `
+              <div class="player-info-group">
+                <span>
+                  ${p.name}
+                  ${id === myId ? "<strong>(Tú)</strong>" : ""}
+                  ${id === PEER_PREFIX + roomCode ? "👑" : ""}
                 </span>
-              `;
 
-              if (showKick) {
-                item
-                  .querySelector(
-                    `[data-kick="${id}"]`
-                  )
-                  .addEventListener(
-                    "click",
-                    () =>
-                      kickPlayer(id)
-                  );
-              }
+                ${
+                  showKick
+                    ? `<button class="btn-kick" data-kick="${id}">
+                        Expulsar
+                       </button>`
+                    : ""
+                }
+              </div>
 
-              els.playersList.appendChild(
-                item
-              );
+              <span class="player-badge ${
+                p.ready ? "badge-ready" : "badge-waiting"
+              }">
+                ${p.ready ? "LISTO" : "ESPERANDO"}
+              </span>
+            `;
+
+            if (showKick) {
+              item
+                .querySelector(`[data-kick="${id}"]`)
+                .addEventListener("click", () => {
+                  kickPlayer(id);
+                });
             }
-          );
+
+            els.playersList.appendChild(item);
+          });
 
           checkAllReady();
         }
 
-        els.btnReady.addEventListener(
-          "click",
-          () => {
-            isReady = !isReady;
+        els.btnReady.addEventListener("click", () => {
+          isReady = !isReady;
 
-            players[myId].ready =
-              isReady;
+          players[myId].ready = isReady;
 
-            els.btnReady.textContent =
-              isReady
-                ? "CANCELAR"
-                : "¡ESTOY LISTO!";
+          els.btnReady.textContent = isReady
+            ? "CANCELAR"
+            : "¡ESTOY LISTO!";
 
-            els.btnReady.style.background =
-              isReady
-                ? "var(--gray-tile)"
-                : "var(--green)";
+          els.btnReady.style.background = isReady
+            ? "var(--gray-tile)"
+            : "var(--green)";
 
-            updatePlayersUI();
+          updatePlayersUI();
 
-            if (isHost) {
-              broadcastList();
-            } else {
-              broadcast({
-                type: "ready",
-                ready: isReady,
-              });
-            }
+          if (isHost) {
+            broadcastList();
+          } else {
+            broadcast({
+              type: "ready",
+              ready: isReady,
+            });
           }
-        );
+        });
 
         function checkAllReady() {
           if (!isHost) return;
 
-          const pList =
-            Object.values(players);
+          const pList = Object.values(players);
 
           const canStart =
             pList.length >= 2 &&
-            pList.every(
-              (p) => p.ready
-            );
+            pList.every((p) => p.ready);
 
-          els.btnStartGame.disabled =
-            !canStart;
+          els.btnStartGame.disabled = !canStart;
         }
 
-        els.btnStartGame.addEventListener(
-          "click",
-          () => {
-            if (!isHost) return;
+        els.btnStartGame.addEventListener("click", () => {
+          if (!isHost) return;
 
-            secretWord =
-              WORDS[
-                Math.floor(
-                  Math.random() *
-                    WORDS.length
-                )
-              ];
+          secretWord =
+            WORDS[Math.floor(Math.random() * WORDS.length)];
 
-            broadcast({
-              type: "start-countdown",
-              word: secretWord,
-            });
+          broadcast({
+            type: "start-countdown",
+            word: secretWord,
+          });
 
-            startCountdown();
-          }
-        );
+          startCountdown();
+        });
 
         function startCountdown() {
-          els.screenLobby.classList.add(
-            "hidden"
-          );
-
-          els.resultOverlay.classList.add(
-            "hidden"
-          );
-
-          els.countdownOverlay.classList.remove(
-            "hidden"
-          );
+          els.screenLobby.classList.add("hidden");
+          els.resultOverlay.classList.add("hidden");
+          els.countdownOverlay.classList.remove("hidden");
 
           let count = 3;
 
-          els.countdownNumber.textContent =
-            count;
+          els.countdownNumber.textContent = count;
 
-          const timer =
-            setInterval(() => {
-              count--;
+          const timer = setInterval(() => {
+            count--;
 
-              if (count > 0) {
-                els.countdownNumber.textContent =
-                  count;
-              } else {
-                clearInterval(timer);
+            if (count > 0) {
+              els.countdownNumber.textContent = count;
+            } else {
+              clearInterval(timer);
 
-                els.countdownOverlay.classList.add(
-                  "hidden"
-                );
+              els.countdownOverlay.classList.add("hidden");
 
-                startGame();
-              }
-            }, 900);
+              startGame();
+            }
+          }, 900);
         }
 
         function startGame() {
           currentRow = 0;
           currentCol = 0;
 
-          rowBuffers =
-            Array.from(
-              { length: 6 },
-              () => Array(5).fill("")
-            );
+          rowBuffers = Array.from(
+            { length: 6 },
+            () => Array(5).fill("")
+          );
 
           winnerCount = 0;
           finishedCount = 0;
           keyStates = {};
           isReadyNextRound = false;
 
-          Object.keys(players).forEach(
-            (id) => {
-              players[id].row = 0;
-              players[id].finished =
-                false;
-              players[id].won = false;
-              players[id].rank = null;
-              players[id].greens = 0;
-              players[id].yellows = 0;
-              players[id].finishTime = 0;
-              players[id].readyNext =
-                false;
-            }
-          );
+          Object.keys(players).forEach((id) => {
+            players[id].row = 0;
+            players[id].finished = false;
+            players[id].won = false;
+            players[id].rank = null;
+            players[id].greens = 0;
+            players[id].yellows = 0;
+            players[id].finishTime = 0;
+            players[id].readyNext = false;
+          });
 
           els.btnPlayerReadyNext.textContent =
             "Listo para otra ronda";
@@ -1940,14 +1447,9 @@
           els.btnPlayerReadyNext.style.background =
             "var(--green)";
 
-          els.screenGame.classList.remove(
-            "hidden"
-          );
+          els.screenGame.classList.remove("hidden");
 
-          setStatus(
-            "connected",
-            "en partida"
-          );
+          setStatus("connected", "en partida");
 
           buildMyBoard();
           buildVirtualKeyboard();
@@ -1960,247 +1462,135 @@
           els.boardMe.innerHTML = "";
 
           for (let r = 0; r < 6; r++) {
-            const rowForm =
-              document.createElement(
-                "form"
-              );
+            const rowForm = document.createElement("form");
 
-            rowForm.className =
-              "board-row";
-
+            rowForm.className = "board-row";
             rowForm.dataset.row = r;
 
-            rowForm.addEventListener(
-              "submit",
-              (e) => {
-                e.preventDefault();
-                submitGuess();
-              }
-            );
+            rowForm.addEventListener("submit", (e) => {
+              e.preventDefault();
+              submitGuess();
+            });
 
             for (let c = 0; c < 5; c++) {
-              const wrap =
-                document.createElement(
-                  "div"
-                );
+              const wrap = document.createElement("div");
 
-              wrap.className =
-                "tile-wrap";
-
+              wrap.className = "tile-wrap";
               wrap.dataset.row = r;
               wrap.dataset.col = c;
 
-              const tile =
-                document.createElement(
-                  "div"
-                );
+              const tile = document.createElement("div");
 
               tile.className = "tile";
 
-              const input =
-                document.createElement(
-                  "input"
-                );
+              const input = document.createElement("input");
 
               input.type = "text";
-              input.className =
-                "tile-native-input";
+              input.className = "tile-native-input";
               input.value = "";
 
-              input.setAttribute(
-                "autocomplete",
-                "off"
-              );
+              input.setAttribute("autocomplete", "off");
+              input.setAttribute("autocorrect", "off");
+              input.setAttribute("autocapitalize", "characters");
+              input.setAttribute("enterkeyhint", "go");
 
-              input.setAttribute(
-                "autocorrect",
-                "off"
-              );
+              input.addEventListener("focus", () => {
+                focusTile(r, c);
+              });
 
-              input.setAttribute(
-                "autocapitalize",
-                "characters"
-              );
+              input.addEventListener("input", (e) => {
+                if (players[myId].finished) return;
 
-              input.setAttribute(
-                "enterkeyhint",
-                "go"
-              );
+                const val = e.target.value
+                  .toUpperCase()
+                  .replace(/[^A-ZÑ]/g, "");
 
-              input.addEventListener(
-                "focus",
-                () => focusTile(r, c)
-              );
+                if (val) {
+                  setLetter(r, c, val.slice(-1));
 
-              input.addEventListener(
-                "input",
-                (e) => {
-                  if (
-                    players[myId]
-                      .finished
-                  ) {
-                    return;
-                  }
-
-                  const val =
-                    e.target.value
-                      .toUpperCase()
-                      .replace(
-                        /[^A-ZÑ]/g,
-                        ""
-                      );
-
-                  if (val) {
-                    setLetter(
-                      r,
-                      c,
-                      val.slice(-1)
-                    );
-
-                    if (c < 4) {
-                      focusTile(
-                        r,
-                        c + 1
-                      );
-                    }
-                  }
-
-                  input.value = "";
-                }
-              );
-
-              input.addEventListener(
-                "keydown",
-                (e) => {
-                  if (
-                    players[myId]
-                      .finished
-                  ) {
-                    return;
-                  }
-
-                  if (
-                    e.key === "Enter" ||
-                    e.keyCode === 13
-                  ) {
-                    e.preventDefault();
-                    submitGuess();
-                  } else if (
-                    e.key ===
-                      "Backspace" ||
-                    e.keyCode === 8
-                  ) {
-                    if (
-                      !rowBuffers[r][
-                        c
-                      ] &&
-                      c > 0
-                    ) {
-                      focusTile(
-                        r,
-                        c - 1
-                      );
-
-                      setLetter(
-                        r,
-                        c - 1,
-                        ""
-                      );
-                    } else {
-                      setLetter(
-                        r,
-                        c,
-                        ""
-                      );
-                    }
+                  if (c < 4) {
+                    focusTile(r, c + 1);
                   }
                 }
-              );
+
+                input.value = "";
+              });
+
+              input.addEventListener("keydown", (e) => {
+                if (players[myId].finished) return;
+
+                if (
+                  e.key === "Enter" ||
+                  e.keyCode === 13
+                ) {
+                  e.preventDefault();
+                  submitGuess();
+                } else if (
+                  e.key === "Backspace" ||
+                  e.keyCode === 8
+                ) {
+                  if (!rowBuffers[r][c] && c > 0) {
+                    focusTile(r, c - 1);
+                    setLetter(r, c - 1, "");
+                  } else {
+                    setLetter(r, c, "");
+                  }
+                }
+              });
 
               wrap.appendChild(tile);
               wrap.appendChild(input);
+
               rowForm.appendChild(wrap);
             }
 
-            els.boardMe.appendChild(
-              rowForm
-            );
+            els.boardMe.appendChild(rowForm);
           }
         }
 
         function buildVirtualKeyboard() {
-          els.virtualKeyboard.innerHTML =
-            "";
+          els.virtualKeyboard.innerHTML = "";
 
-          KEYBOARD_LAYOUT.forEach(
-            (rowKeys) => {
-              const rowDiv =
-                document.createElement(
-                  "div"
-                );
+          KEYBOARD_LAYOUT.forEach((rowKeys) => {
+            const rowDiv = document.createElement("div");
 
-              rowDiv.className =
-                "keyboard-row";
+            rowDiv.className = "keyboard-row";
 
-              rowKeys.forEach((key) => {
-                const keyDiv =
-                  document.createElement(
-                    "div"
-                  );
+            rowKeys.forEach((key) => {
+              const keyDiv = document.createElement("div");
 
-                keyDiv.className =
-                  "key-tile";
+              keyDiv.className = "key-tile";
+              keyDiv.dataset.key = key;
+              keyDiv.textContent = key;
 
-                keyDiv.dataset.key =
-                  key;
+              rowDiv.appendChild(keyDiv);
+            });
 
-                keyDiv.textContent =
-                  key;
-
-                rowDiv.appendChild(
-                  keyDiv
-                );
-              });
-
-              els.virtualKeyboard.appendChild(
-                rowDiv
-              );
-            }
-          );
+            els.virtualKeyboard.appendChild(rowDiv);
+          });
         }
 
-        function updateVirtualKeyboard(
-          word,
-          pattern
-        ) {
+        function updateVirtualKeyboard(word, pattern) {
           for (let i = 0; i < 5; i++) {
             const letter = word[i];
             const status = pattern[i];
 
-            if (
-              status === "correct"
-            ) {
-              keyStates[letter] =
-                "correct";
+            if (status === "correct") {
+              keyStates[letter] = "correct";
             } else if (
               status === "present" &&
-              keyStates[letter] !==
-                "correct"
+              keyStates[letter] !== "correct"
             ) {
-              keyStates[letter] =
-                "present";
+              keyStates[letter] = "present";
             } else if (
               status === "absent" &&
               !keyStates[letter]
             ) {
-              keyStates[letter] =
-                "absent";
+              keyStates[letter] = "absent";
             }
           }
 
-          Object.entries(
-            keyStates
-          ).forEach(
+          Object.entries(keyStates).forEach(
             ([letter, state]) => {
               const keyEl =
                 els.virtualKeyboard.querySelector(
@@ -2214,9 +1604,7 @@
                   "absent"
                 );
 
-                keyEl.classList.add(
-                  state
-                );
+                keyEl.classList.add(state);
               }
             }
           );
@@ -2233,146 +1621,89 @@
           currentCol = c;
 
           document
-            .querySelectorAll(
-              ".tile-wrap"
-            )
+            .querySelectorAll(".tile-wrap")
             .forEach((w) =>
-              w.classList.remove(
-                "focused"
-              )
+              w.classList.remove("focused")
             );
 
-          const wrap =
-            els.boardMe.querySelector(
-              `.tile-wrap[data-row="${r}"][data-col="${c}"]`
-            );
+          const wrap = els.boardMe.querySelector(
+            `.tile-wrap[data-row="${r}"][data-col="${c}"]`
+          );
 
           if (wrap) {
-            wrap.classList.add(
-              "focused"
-            );
+            wrap.classList.add("focused");
 
             const inp =
-              wrap.querySelector(
-                ".tile-native-input"
-              );
+              wrap.querySelector(".tile-native-input");
 
-            if (
-              document.activeElement !==
-              inp
-            ) {
+            if (document.activeElement !== inp) {
               inp.focus();
             }
           }
         }
 
-        function setLetter(
-          r,
-          c,
-          letter
-        ) {
-          rowBuffers[r][c] =
-            letter;
+        function setLetter(r, c, letter) {
+          rowBuffers[r][c] = letter;
 
-          const wrap =
-            els.boardMe.querySelector(
-              `.tile-wrap[data-row="${r}"][data-col="${c}"]`
-            );
+          const wrap = els.boardMe.querySelector(
+            `.tile-wrap[data-row="${r}"][data-col="${c}"]`
+          );
 
           if (wrap) {
-            wrap.querySelector(
-              ".tile"
-            ).textContent = letter;
+            wrap.querySelector(".tile").textContent = letter;
           }
         }
 
         function buildRivalBoards() {
-          els.rivalsGrid.innerHTML =
-            "";
+          els.rivalsGrid.innerHTML = "";
 
-          Object.entries(players).forEach(
-            ([id, p]) => {
-              if (id === myId) return;
+          Object.entries(players).forEach(([id, p]) => {
+            if (id === myId) return;
 
-              const card =
-                document.createElement(
-                  "div"
-                );
+            const card = document.createElement("div");
 
-              card.className =
-                "rival-card";
+            card.className = "rival-card";
+            card.id = `rival-card-${id}`;
 
-              card.id =
-                `rival-card-${id}`;
+            card.innerHTML = `
+              <div class="rival-header">
+                <span>${p.name}</span>
+                <span id="rival-att-${id}">0/6</span>
+              </div>
 
-              card.innerHTML = `
-                <div class="rival-header">
-                  <span>${p.name}</span>
-                  <span id="rival-att-${id}">0/6</span>
-                </div>
+              <div
+                class="board board--rival"
+                id="board-rival-${id}"
+              ></div>
+            `;
 
-                <div
-                  class="board board--rival"
-                  id="board-rival-${id}"
-                ></div>
-              `;
+            const board =
+              card.querySelector(`#board-rival-${id}`);
 
-              const board =
-                card.querySelector(
-                  `#board-rival-${id}`
-                );
+            for (let r = 0; r < 6; r++) {
+              const row = document.createElement("div");
 
-              for (let r = 0; r < 6; r++) {
-                const row =
-                  document.createElement(
-                    "div"
-                  );
+              row.className = "board-row";
+              row.dataset.row = r;
 
-                row.className =
-                  "board-row";
+              for (let c = 0; c < 5; c++) {
+                const wrap = document.createElement("div");
 
-                row.dataset.row = r;
+                wrap.className = "tile-wrap";
 
-                for (
-                  let c = 0;
-                  c < 5;
-                  c++
-                ) {
-                  const wrap =
-                    document.createElement(
-                      "div"
-                    );
+                const tile = document.createElement("div");
 
-                  wrap.className =
-                    "tile-wrap";
+                tile.className = "tile";
 
-                  const tile =
-                    document.createElement(
-                      "div"
-                    );
-
-                  tile.className =
-                    "tile";
-
-                  wrap.appendChild(
-                    tile
-                  );
-
-                  row.appendChild(
-                    wrap
-                  );
-                }
-
-                board.appendChild(
-                  row
-                );
+                wrap.appendChild(tile);
+                row.appendChild(wrap);
               }
 
-              els.rivalsGrid.appendChild(
-                card
-              );
+              board.appendChild(row);
             }
-          );
+
+            els.rivalsGrid.appendChild(card);
+          });
         }
 
         function updateRivalBoard(
@@ -2380,49 +1711,101 @@
           r,
           pattern
         ) {
-          const card =
-            document.getElementById(
-              `rival-card-${rivalId}`
-            );
+          const card = document.getElementById(
+            `rival-card-${rivalId}`
+          );
 
           if (!card) return;
 
           card.querySelector(
             `#rival-att-${rivalId}`
-          ).textContent =
-            `${r + 1}/6`;
+          ).textContent = `${r + 1}/6`;
 
-          const row =
-            card.querySelector(
-              `.board-row[data-row="${r}"]`
-            );
+          const row = card.querySelector(
+            `.board-row[data-row="${r}"]`
+          );
 
           if (!row) return;
 
-          const tiles =
-            row.querySelectorAll(
-              ".tile"
-            );
+          const tiles = row.querySelectorAll(".tile");
 
-          tiles.forEach(
-            (t, i) =>
-              t.classList.add(
-                pattern[i]
-              )
-          );
+          tiles.forEach((t, i) => {
+            t.classList.add(pattern[i]);
+          });
         }
 
-        function submitGuess() {
-          if (
-            players[myId].finished
-          ) {
+        /*
+         * ============================================================
+         * NUEVA FUNCIÓN PARA 1VS1
+         * ============================================================
+         *
+         * Recibe el ID del jugador que ha perdido.
+         *
+         * En un 1vs1:
+         *
+         * - El jugador que agota los 6 intentos = pierde.
+         * - El otro jugador = gana.
+         * - El ganador queda #1.
+         * - El que agotó los intentos queda #2.
+         *
+         * IMPORTANTE:
+         * No se tienen en cuenta verdes ni amarillas para determinar
+         * el resultado.
+         */
+        function resolveDuelLoss(loserId) {
+          const playerIds = Object.keys(players);
+
+          if (playerIds.length !== 2) {
             return;
           }
 
+          const winnerId = playerIds.find(
+            (id) => id !== loserId
+          );
+
+          if (!winnerId) {
+            return;
+          }
+
+          const loser = players[loserId];
+          const winner = players[winnerId];
+
+          /*
+           * El jugador que falló los 6 intentos pierde.
+           */
+          loser.won = false;
+          loser.rank = 2;
+          loser.finished = true;
+
+          /*
+           * El rival gana automáticamente.
+           *
+           * No importa cuántas verdes o amarillas tenga.
+           */
+          winner.won = true;
+          winner.rank = 1;
+          winner.finished = true;
+
+          /*
+           * Si el ganador todavía no había terminado porque el otro
+           * jugador ha perdido primero, registramos el momento.
+           */
+          if (!winner.finishTime) {
+            winner.finishTime = Date.now();
+          }
+
+          /*
+           * Nos aseguramos de que el contador de ganadores sea
+           * coherente.
+           */
+          winnerCount = 1;
+        }
+
+        function submitGuess() {
+          if (players[myId].finished) return;
+
           const word =
-            rowBuffers[currentRow].join(
-              ""
-            );
+            rowBuffers[currentRow].join("");
 
           if (word.length < 5) {
             return showToast(
@@ -2430,86 +1813,89 @@
             );
           }
 
-          const pattern =
-            evaluateGuess(
-              word,
-              secretWord
-            );
-
-          paintRow(
-            currentRow,
-            pattern
+          const pattern = evaluateGuess(
+            word,
+            secretWord
           );
+
+          paintRow(currentRow, pattern);
 
           updateVirtualKeyboard(
             word,
             pattern
           );
 
-          let currentGreens =
+          const currentGreens =
             pattern.filter(
-              (p) =>
-                p === "correct"
+              (p) => p === "correct"
             ).length;
 
-          let currentYellows =
+          const currentYellows =
             pattern.filter(
-              (p) =>
-                p === "present"
+              (p) => p === "present"
             ).length;
 
-          players[myId].greens +=
-            currentGreens;
-
-          players[myId].yellows +=
-            currentYellows;
+          players[myId].greens += currentGreens;
+          players[myId].yellows += currentYellows;
 
           broadcast({
             type: "guess",
             row: currentRow,
             pattern,
-            greens:
-              players[myId].greens,
-            yellows:
-              players[myId].yellows,
+            greens: players[myId].greens,
+            yellows: players[myId].yellows,
           });
 
-          const won =
-            pattern.every(
-              (p) =>
-                p === "correct"
-            );
+          const won = pattern.every(
+            (p) => p === "correct"
+          );
 
+          /*
+           * ==========================================================
+           * CASO 1: EL JUGADOR HA GANADO
+           * ==========================================================
+           */
           if (won) {
-            players[myId].finished =
-              true;
-
-            players[myId].won =
-              true;
-
-            players[myId].finishTime =
-              Date.now();
+            players[myId].finished = true;
+            players[myId].won = true;
+            players[myId].finishTime = Date.now();
 
             winnerCount++;
+
+            const rank = winnerCount;
+
+            players[myId].rank = rank;
+
+            /*
+             * NUEVO COMPORTAMIENTO 1VS1:
+             *
+             * Si es un duelo 1vs1 y nosotros hemos acertado,
+             * automáticamente el rival queda #2.
+             *
+             * De esta forma no dependemos de sus verdes/amarillas.
+             */
+            if (Object.keys(players).length === 2) {
+              const opponentId =
+                Object.keys(players).find(
+                  (id) => id !== myId
+                );
+
+              if (opponentId) {
+                players[opponentId].won = false;
+                players[opponentId].rank = 2;
+                players[opponentId].finished = true;
+              }
+            }
+
             finishedCount++;
-
-            const rank =
-              winnerCount;
-
-            players[myId].rank =
-              rank;
 
             broadcast({
               type: "finish",
               won: true,
               rank,
-              greens:
-                players[myId].greens,
-              yellows:
-                players[myId].yellows,
-              finishTime:
-                players[myId]
-                  .finishTime,
+              greens: players[myId].greens,
+              yellows: players[myId].yellows,
+              finishTime: players[myId].finishTime,
             });
 
             showToast(
@@ -2517,48 +1903,63 @@
             );
 
             checkGameEnd();
-          } else if (
-            currentRow >= 5
-          ) {
-            players[myId].finished =
-              true;
+          }
 
-            players[myId].won =
-              false;
-
-            players[myId].rank =
-              null;
-
-            players[myId].finishTime =
-              Date.now();
+          /*
+           * ==========================================================
+           * CASO 2: HA AGOTADO LOS 6 INTENTOS
+           * ==========================================================
+           */
+          else if (currentRow >= 5) {
+            players[myId].finished = true;
+            players[myId].won = false;
+            players[myId].rank = null;
+            players[myId].finishTime = Date.now();
 
             finishedCount++;
+
+            /*
+             * ========================================================
+             * CAMBIO PRINCIPAL
+             * ========================================================
+             *
+             * En 1VS1, quedarse sin intentos significa PERDER.
+             *
+             * Por tanto, antes de mostrar los resultados hacemos que
+             * el otro jugador sea el ganador.
+             */
+            if (Object.keys(players).length === 2) {
+              resolveDuelLoss(myId);
+            }
 
             broadcast({
               type: "finish",
               won: false,
-              rank: null,
-              greens:
-                players[myId].greens,
-              yellows:
-                players[myId].yellows,
-              finishTime:
-                players[myId]
-                  .finishTime,
+              rank: Object.keys(players).length === 2
+                ? 2
+                : null,
+              greens: players[myId].greens,
+              yellows: players[myId].yellows,
+              finishTime: players[myId].finishTime,
             });
 
             showToast(
               "Has agotado tus intentos"
             );
 
-            if (
-              document.activeElement
-            ) {
+            if (document.activeElement) {
               document.activeElement.blur();
             }
 
             checkGameEnd();
-          } else {
+          }
+
+          /*
+           * ==========================================================
+           * SIGUIENTE INTENTO
+           * ==========================================================
+           */
+          else {
             currentRow++;
 
             focusTile(
@@ -2572,57 +1973,30 @@
           guess,
           target
         ) {
-          const res =
-            Array(5).fill(
-              "absent"
-            );
+          const res = Array(5).fill("absent");
 
-          const tArr =
-            target.split("");
+          const tArr = target.split("");
 
-          const used =
-            Array(5).fill(false);
+          const used = Array(5).fill(false);
 
-          for (
-            let i = 0;
-            i < 5;
-            i++
-          ) {
-            if (
-              guess[i] ===
-              tArr[i]
-            ) {
-              res[i] =
-                "correct";
-
+          for (let i = 0; i < 5; i++) {
+            if (guess[i] === tArr[i]) {
+              res[i] = "correct";
               used[i] = true;
             }
           }
 
-          for (
-            let i = 0;
-            i < 5;
-            i++
-          ) {
-            if (
-              res[i] ===
-              "correct"
-            ) {
-              continue;
-            }
+          for (let i = 0; i < 5; i++) {
+            if (res[i] === "correct") continue;
 
-            const idx =
-              tArr.findIndex(
-                (l, j) =>
-                  !used[j] &&
-                  l ===
-                    guess[i]
-              );
+            const idx = tArr.findIndex(
+              (l, j) =>
+                !used[j] &&
+                l === guess[i]
+            );
 
             if (idx !== -1) {
-              res[i] =
-                "present";
-
+              res[i] = "present";
               used[idx] = true;
             }
           }
@@ -2644,48 +2018,60 @@
               ".tile-wrap"
             );
 
-          wraps.forEach(
-            (w, i) => {
-              w.querySelector(
-                ".tile"
-              ).classList.add(
-                pattern[i]
-              );
-            }
-          );
+          wraps.forEach((w, i) => {
+            w.querySelector(".tile").classList.add(
+              pattern[i]
+            );
+          });
         }
 
-        /*
-         * ============================================================
-         * LÓGICA DE FINAL DE PARTIDA
-         * ============================================================
-         *
-         * 1 VS 1:
-         * - Si alguien acierta, gana.
-         * - Si alguien agota sus 6 intentos, pierde inmediatamente.
-         * - NO se comparan verdes ni amarillas.
-         *
-         * MÁS DE 2:
-         * - Se mantiene la lógica original.
-         */
         function checkGameEnd() {
           const totalPlayers =
             Object.keys(players).length;
 
-          // ========================================================
-          // REGLA ESPECIAL PARA 1 VS 1
-          // ========================================================
+          /*
+           * ==========================================================
+           * 1VS1
+           * ==========================================================
+           *
+           * Aquí NO se utiliza el número de verdes/amarillas para
+           * decidir quién gana.
+           *
+           * Si uno ha ganado, ese jugador es #1.
+           *
+           * Si uno ha perdido por agotar los intentos, el otro es #1
+           * y el que falló es #2.
+           */
           if (totalPlayers === 2) {
-            const someoneLost =
-              Object.values(
-                players
-              ).some(
-                (p) =>
-                  p.finished &&
-                  !p.won
-              );
+            const duelWinner = Object.entries(
+              players
+            ).find(
+              ([, p]) => p.won
+            );
 
-            if (someoneLost) {
+            if (duelWinner) {
+              const winnerId =
+                duelWinner[0];
+
+              const loserEntry =
+                Object.entries(players).find(
+                  ([id]) =>
+                    id !== winnerId
+                );
+
+              players[winnerId].won = true;
+              players[winnerId].rank = 1;
+              players[winnerId].finished = true;
+
+              if (loserEntry) {
+                const loser =
+                  players[loserEntry[0]];
+
+                loser.won = false;
+                loser.rank = 2;
+                loser.finished = true;
+              }
+
               setTimeout(
                 showFinalResults,
                 800
@@ -2694,14 +2080,34 @@
               return;
             }
 
-            const someoneWon =
-              Object.values(
-                players
-              ).some(
-                (p) => p.won
+            /*
+             * Si alguien ha perdido y todavía no hay ganador
+             * establecido, resolvemos el duelo por eliminación.
+             */
+            const someoneLost =
+              Object.values(players).some(
+                (p) =>
+                  p.finished &&
+                  !p.won
               );
 
-            if (someoneWon) {
+            if (
+              someoneLost &&
+              finishedCount >= 1
+            ) {
+              const loserEntry =
+                Object.entries(players).find(
+                  ([, p]) =>
+                    p.finished &&
+                    !p.won
+                );
+
+              if (loserEntry) {
+                resolveDuelLoss(
+                  loserEntry[0]
+                );
+              }
+
               setTimeout(
                 showFinalResults,
                 800
@@ -2713,14 +2119,15 @@
             return;
           }
 
-          // ========================================================
-          // MÁS DE 2 JUGADORES
-          // LÓGICA ORIGINAL SIN CAMBIOS
-          // ========================================================
+          /*
+           * ==========================================================
+           * 3 O MÁS JUGADORES
+           * ==========================================================
+           *
+           * Esta parte mantiene la lógica original.
+           */
           const winners =
-            Object.values(
-              players
-            ).filter(
+            Object.values(players).filter(
               (p) => p.won
             ).length;
 
@@ -2738,8 +2145,7 @@
             );
           } else if (
             activePlayers === 1 &&
-            winners ===
-              totalPlayers - 1
+            winners === totalPlayers - 1
           ) {
             setTimeout(
               showFinalResults,
@@ -2752,11 +2158,8 @@
           if (!isHost) return;
 
           const nonHostPlayers =
-            Object.entries(
-              players
-            ).filter(
-              ([id]) =>
-                id !== myId
+            Object.entries(players).filter(
+              ([id]) => id !== myId
             );
 
           const readyCount =
@@ -2777,102 +2180,67 @@
           els.resultWord.textContent =
             secretWord;
 
-          els.leaderboard.innerHTML =
-            "";
+          els.leaderboard.innerHTML = "";
 
-          const totalPlayers =
-            Object.keys(players).length;
-
-          let sorted;
-
-          // ========================================================
-          // REGLA ESPECIAL PARA 1 VS 1
-          // ========================================================
-          //
-          // En 1vs1:
-          //   ganador = jugador que acertó
-          //   perdedor = jugador que agotó los intentos
-          //
-          // Las verdes y amarillas NO intervienen en la posición.
-          // ========================================================
-          if (totalPlayers === 2) {
-            sorted =
-              Object.values(
-                players
-              ).sort(
-                (a, b) => {
-                  if (
-                    a.won &&
-                    !b.won
-                  ) {
-                    return -1;
-                  }
-
-                  if (
-                    !a.won &&
-                    b.won
-                  ) {
-                    return 1;
-                  }
-
-                  return 0;
-                }
-              );
-          } else {
-            // ======================================================
-            // MÁS DE 2 JUGADORES
-            // LÓGICA ORIGINAL
-            // ======================================================
-            sorted =
-              Object.values(
-                players
-              ).sort(
-                (a, b) => {
-                  if (
-                    a.won &&
-                    b.won
-                  ) {
-                    return (
-                      a.rank -
-                      b.rank
-                    );
-                  }
-
-                  if (a.won) {
-                    return -1;
-                  }
-
-                  if (b.won) {
-                    return 1;
-                  }
-
-                  if (
-                    b.greens !==
-                    a.greens
-                  ) {
-                    return (
-                      b.greens -
-                      a.greens
-                    );
-                  }
-
-                  if (
-                    b.yellows !==
-                    a.yellows
-                  ) {
-                    return (
-                      b.yellows -
-                      a.yellows
-                    );
-                  }
-
+          const sorted =
+            Object.values(players).sort(
+              (a, b) => {
+                /*
+                 * En 1VS1 el orden se determina EXCLUSIVAMENTE
+                 * por rank.
+                 */
+                if (
+                  Object.keys(players).length === 2
+                ) {
                   return (
-                    a.finishTime -
-                    b.finishTime
+                    (a.rank ?? 999) -
+                    (b.rank ?? 999)
                   );
                 }
-              );
-          }
+
+                /*
+                 * En partidas de más de 2 jugadores se mantiene
+                 * exactamente la lógica original.
+                 */
+                if (
+                  a.won &&
+                  b.won
+                ) {
+                  return (
+                    a.rank -
+                    b.rank
+                  );
+                }
+
+                if (a.won) return -1;
+                if (b.won) return 1;
+
+                if (
+                  b.greens !==
+                  a.greens
+                ) {
+                  return (
+                    b.greens -
+                    a.greens
+                  );
+                }
+
+                if (
+                  b.yellows !==
+                  a.yellows
+                ) {
+                  return (
+                    b.yellows -
+                    a.yellows
+                  );
+                }
+
+                return (
+                  a.finishTime -
+                  b.finishTime
+                );
+              }
+            );
 
           sorted.forEach(
             (p, idx) => {
