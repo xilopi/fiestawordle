@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"
@@ -11,6 +12,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <link
     href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700;800&display=swap"
     rel="stylesheet"
@@ -24,6 +26,7 @@
       --panel-raised: #2a2320;
       --border: #3a322c;
       --border-soft: #2e2722;
+
       --text: #f1e9df;
       --text-dim: #a89d90;
       --text-faint: #6f6459;
@@ -61,13 +64,9 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
-
       background: var(--ink);
       color: var(--text);
-
       font-family: var(--font-mono);
-
-      touch-action: manipulation;
     }
 
     body {
@@ -84,29 +83,27 @@
         );
 
       min-height: 100vh;
-
       display: flex;
       flex-direction: column;
+
+      overscroll-behavior: none;
+    }
+
+    button {
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .noise-overlay {
       position: fixed;
       inset: 0;
-
       pointer-events: none;
-
       z-index: 999;
-
       opacity: 0.035;
-
       mix-blend-mode: overlay;
 
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
-
-    /* =========================================================
-       TOPBAR
-    ========================================================= */
 
     .topbar {
       display: flex;
@@ -142,11 +139,9 @@
       padding: 6px 12px;
 
       border: 1px solid var(--border);
-
       border-radius: 999px;
 
       font-size: 0.75rem;
-
       color: var(--text-dim);
 
       background: var(--panel);
@@ -155,7 +150,6 @@
     .status-dot {
       width: 8px;
       height: 8px;
-
       border-radius: 50%;
 
       background: var(--text-faint);
@@ -183,9 +177,9 @@
       display: none !important;
     }
 
-    /* =========================================================
+    /* =========================
        LOBBY
-    ========================================================= */
+       ========================= */
 
     .screen-lobby {
       display: flex;
@@ -194,7 +188,6 @@
       padding: 32px 20px;
 
       max-width: 800px;
-
       margin: 0 auto;
 
       gap: 24px;
@@ -202,7 +195,6 @@
 
     .lobby-hero h1 {
       font-family: var(--font-display);
-
       font-weight: 800;
 
       font-size: clamp(2rem, 4vw, 3rem);
@@ -212,23 +204,18 @@
 
     .lede {
       color: var(--text-dim);
-
       font-size: 0.9rem;
-
       margin: 0;
     }
 
     .lobby-panels {
       display: grid;
-
       grid-template-columns: 1fr 1fr;
-
       gap: 20px;
     }
 
     .panel {
       background: var(--panel);
-
       border: 1px solid var(--border-soft);
 
       border-radius: var(--radius);
@@ -237,23 +224,18 @@
 
       display: flex;
       flex-direction: column;
-
       gap: 14px;
     }
 
     .panel h2 {
       font-family: var(--font-display);
-
       font-size: 1.15rem;
-
       margin: 0;
     }
 
     .btn {
       font-family: var(--font-mono);
-
       font-weight: 700;
-
       font-size: 0.85rem;
 
       border-radius: 10px;
@@ -265,15 +247,12 @@
       cursor: pointer;
 
       width: 100%;
-
       text-align: center;
 
       transition:
         filter 0.15s ease,
         opacity 0.15s ease,
         transform 0.08s ease;
-
-      touch-action: manipulation;
     }
 
     .btn:active {
@@ -282,43 +261,34 @@
 
     .btn:disabled {
       opacity: 0.4;
-
       cursor: not-allowed;
     }
 
     .btn-primary {
       background: var(--accent);
-
       color: var(--accent-ink);
     }
 
     .btn-secondary {
       background: transparent;
-
       color: var(--text);
-
       border: 1px solid var(--border);
     }
 
     .btn-ready {
       background: var(--green);
-
       color: #0e1a09;
     }
 
     .btn-start {
       background: var(--accent-soft);
-
       color: var(--accent-ink);
-
       margin-top: 8px;
     }
 
     .btn-kick {
       background: transparent;
-
       border: 1px solid var(--red);
-
       color: var(--red);
 
       font-size: 0.65rem;
@@ -332,7 +302,6 @@
 
     .btn-kick:hover {
       background: var(--red);
-
       color: #fff;
     }
 
@@ -361,7 +330,6 @@
 
     .code-display {
       font-size: 1.8rem;
-
       font-weight: 800;
 
       color: var(--accent-soft);
@@ -407,7 +375,6 @@
     .players-list {
       display: flex;
       flex-direction: column;
-
       gap: 8px;
     }
 
@@ -415,7 +382,6 @@
       display: flex;
 
       justify-content: space-between;
-
       align-items: center;
 
       padding: 10px 14px;
@@ -429,9 +395,7 @@
 
     .player-info-group {
       display: flex;
-
       align-items: center;
-
       gap: 10px;
     }
 
@@ -447,34 +411,29 @@
 
     .badge-ready {
       background: var(--green);
-
       color: #0e1a09;
     }
 
     .badge-waiting {
       background: var(--gray-tile);
-
       color: var(--text-dim);
     }
 
     .lobby-msg {
       font-size: 0.8rem;
-
       color: var(--text-dim);
-
       text-align: center;
     }
 
-    /* =========================================================
+    /* =========================
        GAME
-    ========================================================= */
+       ========================= */
 
     .screen-game {
       padding: 16px;
 
       display: flex;
       flex-direction: column;
-
       align-items: center;
 
       gap: 20px;
@@ -482,21 +441,17 @@
 
     .arena {
       display: flex;
-
       flex-direction: column;
 
       gap: 20px;
 
       width: 100%;
-
       max-width: 1200px;
     }
 
     .my-area {
       display: flex;
-
       flex-direction: column;
-
       align-items: center;
 
       gap: 16px;
@@ -505,7 +460,8 @@
     .board {
       display: grid;
 
-      grid-template-rows: repeat(6, 1fr);
+      grid-template-rows:
+        repeat(6, 1fr);
 
       gap: 6px;
     }
@@ -513,12 +469,12 @@
     .board-row {
       display: grid;
 
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns:
+        repeat(5, 1fr);
 
       gap: 6px;
 
       margin: 0;
-
       padding: 0;
 
       border: none;
@@ -536,7 +492,6 @@
       height: 100%;
 
       display: flex;
-
       align-items: center;
       justify-content: center;
 
@@ -556,36 +511,16 @@
 
       transition:
         border-color 0.15s ease,
-        background 0.25s ease;
+        background 0.25s ease,
+        transform 0.08s ease;
     }
 
     .tile-wrap.focused .tile {
       border-color: var(--accent);
 
       box-shadow:
-        0 0 8px rgba(255, 122, 69, 0.4);
-    }
-
-    /*
-      Input invisible.
-
-      Sigue existiendo para que podamos utilizar el teclado
-      físico del ordenador, pero en móvil evitamos que el
-      teclado nativo se abra al pulsar las teclas virtuales.
-    */
-    .tile-native-input {
-      position: absolute;
-
-      inset: 0;
-
-      opacity: 0;
-
-      width: 100%;
-      height: 100%;
-
-      cursor: pointer;
-
-      font-size: 16px;
+        0 0 8px
+        rgba(255, 122, 69, 0.4);
     }
 
     .tile.correct,
@@ -617,33 +552,23 @@
       opacity: 0.5;
     }
 
-    /* =========================================================
+    /* =========================
        TECLADO VIRTUAL
-    ========================================================= */
+       ========================= */
 
     .keyboard {
       display: flex;
-
       flex-direction: column;
 
       gap: 6px;
 
       width: 100%;
 
-      max-width: 420px;
+      max-width: 390px;
 
       user-select: none;
 
-      opacity: 0.98;
-
-      /*
-        IMPORTANTE:
-
-        El teclado de la página controla todo mediante JS.
-        No queremos que el navegador intente seleccionar,
-        desplazar o abrir el teclado del móvil.
-      */
-      touch-action: manipulation;
+      -webkit-user-select: none;
     }
 
     .keyboard-row {
@@ -666,81 +591,75 @@
       display: flex;
 
       align-items: center;
-
       justify-content: center;
 
       background: var(--panel-raised);
 
       border: 1px solid var(--border);
 
-      border-radius: 6px;
+      border-radius: 7px;
 
       font-size: 0.78rem;
 
-      font-weight: 700;
+      font-weight: 800;
 
       color: var(--text);
-
-      transition:
-        background 0.12s ease,
-        transform 0.08s ease,
-        opacity 0.2s ease;
 
       cursor: pointer;
 
       touch-action: manipulation;
 
-      -webkit-user-select: none;
-
-      user-select: none;
+      transition:
+        background 0.12s ease,
+        transform 0.08s ease,
+        border-color 0.12s ease;
     }
 
     .key-tile:active {
-      transform: scale(0.94);
+      transform: scale(0.93);
 
-      filter: brightness(1.25);
+      background: var(--border);
+    }
+
+    .key-tile.action {
+      flex: 1.35;
+
+      font-size: 0.72rem;
+    }
+
+    .key-tile.enter {
+      color: var(--green);
+    }
+
+    .key-tile.backspace {
+      color: var(--accent-soft);
     }
 
     /*
-      ENTER y BORRAR son algo más grandes
-      porque están en los extremos.
+      Las filas 1 y 2 empiezan un poco más centradas,
+      como un teclado convencional.
     */
-    .key-tile.key-action {
-      flex: 1.45;
-
-      font-size: 0.68rem;
+    .keyboard-row:nth-child(2) {
+      padding: 0 5%;
     }
 
-    .key-tile.key-delete {
-      flex: 1.45;
-
-      font-size: 1rem;
+    /*
+      La tercera fila tiene INTRO a la izquierda
+      y BORRAR a la derecha.
+    */
+    .keyboard-row:nth-child(3) {
+      gap: 5px;
     }
 
-    .key-tile.correct {
-      opacity: 1;
-    }
-
-    .key-tile.present {
-      opacity: 1;
-    }
-
-    .key-tile.absent {
-      opacity: 0.45;
-    }
-
-    /* =========================================================
+    /* =========================
        RIVALES
-    ========================================================= */
+       ========================= */
 
     .rivals-grid {
       display: grid;
 
       grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(140px, 1fr)
-        );
+        repeat(auto-fit, minmax(140px, 1fr));
 
       gap: 12px;
 
@@ -757,7 +676,6 @@
       padding: 10px;
 
       display: flex;
-
       flex-direction: column;
 
       align-items: center;
@@ -779,7 +697,6 @@
 
     .board--rival .tile-wrap {
       width: 22px;
-
       height: 22px;
     }
 
@@ -789,9 +706,9 @@
       border-width: 1px;
     }
 
-    /* =========================================================
+    /* =========================
        COUNTDOWN
-    ========================================================= */
+       ========================= */
 
     .countdown-overlay {
       position: fixed;
@@ -803,7 +720,6 @@
       display: flex;
 
       align-items: center;
-
       justify-content: center;
 
       background: rgba(10, 8, 7, 0.9);
@@ -821,32 +737,31 @@
       color: var(--accent);
 
       animation:
-        pulse 0.8s ease-in-out infinite;
+        pulse 0.8s
+        ease-in-out
+        infinite;
     }
 
     @keyframes pulse {
       0% {
         transform: scale(0.6);
-
         opacity: 0.3;
       }
 
       50% {
         transform: scale(1.1);
-
         opacity: 1;
       }
 
       100% {
         transform: scale(1);
-
         opacity: 1;
       }
     }
 
-    /* =========================================================
+    /* =========================
        RESULTADOS
-    ========================================================= */
+       ========================= */
 
     .result-overlay {
       position: fixed;
@@ -858,7 +773,6 @@
       display: flex;
 
       align-items: center;
-
       justify-content: center;
 
       background: rgba(10, 8, 7, 0.85);
@@ -942,10 +856,6 @@
       margin-bottom: 2px;
     }
 
-    /* =========================================================
-       TOAST
-    ========================================================= */
-
     .toast {
       position: fixed;
 
@@ -968,29 +878,39 @@
       font-size: 0.82rem;
 
       z-index: 1001;
+
+      max-width: 90%;
+
+      text-align: center;
     }
 
-    /* =========================================================
+    /* =========================
        MÓVIL
-    ========================================================= */
+       ========================= */
 
     @media (max-width: 600px) {
+      .topbar {
+        padding: 14px 16px;
+      }
+
       .lobby-panels {
         grid-template-columns: 1fr;
       }
 
-      .tile-wrap {
-        width: 14vw;
-
-        height: 14vw;
-
-        max-width: 44px;
-
-        max-height: 44px;
-      }
-
       .screen-game {
         padding: 12px 8px;
+      }
+
+      .tile-wrap {
+        width: 14vw;
+        height: 14vw;
+
+        max-width: 48px;
+        max-height: 48px;
+      }
+
+      .tile {
+        font-size: 1.15rem;
       }
 
       .keyboard {
@@ -998,44 +918,30 @@
         padding: 0 2px;
       }
 
-      .keyboard-row {
-        gap: 4px;
-      }
-
       .key-tile {
         height: 43px;
-
-        border-radius: 6px;
 
         font-size: 0.72rem;
       }
 
-      .key-tile.key-action {
-        font-size: 0.58rem;
+      .key-tile.action {
+        font-size: 0.65rem;
       }
 
-      .key-tile.key-delete {
-        font-size: 0.9rem;
-      }
-
-      .result-card {
-        padding: 24px;
+      .keyboard-row:nth-child(2) {
+        padding: 0 4%;
       }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 380px) {
       .key-tile {
         height: 40px;
 
-        font-size: 0.64rem;
+        font-size: 0.65rem;
       }
 
-      .key-tile.key-action {
-        font-size: 0.52rem;
-      }
-
-      .key-tile.key-delete {
-        font-size: 0.8rem;
+      .key-tile.action {
+        font-size: 0.58rem;
       }
     }
   </style>
@@ -1044,49 +950,30 @@
 <body>
   <div class="noise-overlay"></div>
 
-  <!-- =========================================================
-       TOPBAR
-  ========================================================= -->
-
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark">◆</span>
-
-      <span class="brand-name">
-        DUELO
-      </span>
+      <span class="brand-name">DUELO</span>
     </div>
 
     <div class="status-pill">
-      <span
-        class="status-dot"
-        id="statusDot"
-      ></span>
-
-      <span id="statusText">
-        sin conectar
-      </span>
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">sin conectar</span>
     </div>
   </header>
 
-  <!-- =========================================================
-       APP
-  ========================================================= -->
-
   <main id="app">
 
-    <!-- =======================================================
+    <!-- =========================
          LOBBY
-    ======================================================== -->
+         ========================= -->
 
     <section
       id="screen-lobby"
       class="screen screen-lobby"
     >
       <div class="lobby-hero">
-        <h1>
-          Wordle Multijugador
-        </h1>
+        <h1>Wordle Multijugador</h1>
 
         <p class="lede">
           Hasta 7 jugadores en tiempo real.
@@ -1120,9 +1007,7 @@
         class="lobby-panels"
       >
         <div class="panel">
-          <h2>
-            Crear Sala
-          </h2>
+          <h2>Crear Sala</h2>
 
           <button
             id="btnHost"
@@ -1133,9 +1018,7 @@
         </div>
 
         <div class="panel">
-          <h2>
-            Unirse a Sala
-          </h2>
+          <h2>Unirse a Sala</h2>
 
           <input
             id="joinCodeInput"
@@ -1210,9 +1093,9 @@
       </div>
     </section>
 
-    <!-- =======================================================
-         GAME
-    ======================================================== -->
+    <!-- =========================
+         PARTIDA
+         ========================= -->
 
     <section
       id="screen-game"
@@ -1228,11 +1111,12 @@
           ></div>
 
           <!--
-            TECLADO VIRTUAL
+            TECLADO VIRTUAL.
 
-            Ahora tiene exactamente 3 filas.
+            IMPORTANTE:
+            No utilizamos inputs para las teclas.
+            Así no se abre el teclado nativo del móvil.
           -->
-
           <div
             id="virtualKeyboard"
             class="keyboard"
@@ -1250,9 +1134,9 @@
 
   </main>
 
-  <!-- =========================================================
+  <!-- =========================
        COUNTDOWN
-  ========================================================= -->
+       ========================= -->
 
   <div
     id="countdownOverlay"
@@ -1266,9 +1150,9 @@
     </div>
   </div>
 
-  <!-- =========================================================
+  <!-- =========================
        RESULTADOS
-  ========================================================= -->
+       ========================= -->
 
   <div
     id="resultOverlay"
@@ -1342,10 +1226,6 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       TOAST
-  ========================================================= -->
-
   <div
     id="toast"
     class="toast hidden"
@@ -1354,12 +1234,6 @@
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <script>
-    /*
-     * ============================================================
-     * PALABRAS
-     * ============================================================
-     */
-
     const WORDS = [
       "ABRIR","ACTOR","AGUDO","AGUJA","ALGAS","ALTAR","ALZAR","AMIGO",
       "ANCHO","ANDAR","ANIMO","ANTES","APOYO","ARBOL","ARDER","ARENA",
@@ -1414,23 +1288,15 @@
       "ZORRO"
     ];
 
-    /*
-     * ============================================================
-     * PEERJS
-     * ============================================================
-     */
-
     const ICE_SERVERS = [
       {
         urls: "stun:stun.l.google.com:19302"
       },
-
       {
         urls: "turn:openrelay.metered.ca:80",
         username: "openrelayproject",
         credential: "openrelayproject"
       },
-
       {
         urls: "turn:openrelay.metered.ca:443",
         username: "openrelayproject",
@@ -1439,35 +1305,42 @@
     ];
 
     /*
-     * ============================================================
-     * CONFIGURACIÓN
-     * ============================================================
+     * Teclado visual.
+     *
+     * Las dos primeras filas son normales.
+     *
+     * La tercera:
+     *
+     * ENTER | Z X C V B N M | BORRAR
      */
-
     const KEYBOARD_LAYOUT = [
-      ["Q","W","E","R","T","Y","U","I","O","P"],
-      ["A","S","D","F","G","H","J","K","L","Ñ"],
-      ["ENTER","Z","X","C","V","B","N","M","BACKSPACE"]
+      [
+        "Q","W","E","R","T",
+        "Y","U","I","O","P"
+      ],
+
+      [
+        "A","S","D","F","G",
+        "H","J","K","L","Ñ"
+      ],
+
+      [
+        "ENTER",
+        "Z","X","C","V","B","N","M",
+        "BACKSPACE"
+      ]
     ];
 
     const MAX_PLAYERS = 7;
 
     const CONNECT_TIMEOUT_MS = 15000;
 
-    /*
-     * ============================================================
-     * APP
-     * ============================================================
-     */
-
     (function () {
-
       "use strict";
 
       const PEER_PREFIX = "duelo-7p-";
 
       const els = {
-
         statusDot:
           document.getElementById("statusDot"),
 
@@ -1554,7 +1427,6 @@
       };
 
       let myName = "";
-
       let myId = "";
 
       let isHost = false;
@@ -1573,10 +1445,11 @@
 
       let currentCol = 0;
 
-      let rowBuffers = Array.from(
-        { length: 6 },
-        () => Array(5).fill("")
-      );
+      let rowBuffers =
+        Array.from(
+          { length: 6 },
+          () => Array(5).fill("")
+        );
 
       let isReady = false;
 
@@ -1587,12 +1460,6 @@
       let finishedCount = 0;
 
       let keyStates = {};
-
-      /*
-       * ============================================================
-       * NOMBRE GUARDADO
-       * ============================================================
-       */
 
       const savedName =
         localStorage.getItem(
@@ -1605,40 +1472,41 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * COPIAR CÓDIGO
-       * ============================================================
+       * ============================
        */
 
       els.roomCodeDisplay.addEventListener(
         "click",
         () => {
-
           if (!roomCode) return;
 
-          navigator.clipboard
-            .writeText(roomCode)
-            .then(() => {
-              showToast(
-                "¡Código copiado al portapapeles!"
-              );
-            })
-            .catch(() => {
-              showToast(
-                "Código: " + roomCode
-              );
-            });
+          if (
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+          ) {
+            navigator.clipboard
+              .writeText(roomCode)
+              .then(() => {
+                showToast(
+                  "¡Código copiado al portapapeles!"
+                );
+              })
+              .catch(() => {
+                showToast(
+                  "Código: " + roomCode
+                );
+              });
+          } else {
+            showToast(
+              "Código: " + roomCode
+            );
+          }
         }
       );
 
-      /*
-       * ============================================================
-       * TOAST
-       * ============================================================
-       */
-
       function showToast(msg) {
-
         els.toast.textContent = msg;
 
         els.toast.classList.remove(
@@ -1652,17 +1520,10 @@
         }, 2500);
       }
 
-      /*
-       * ============================================================
-       * ESTADO CONEXIÓN
-       * ============================================================
-       */
-
       function setStatus(
         state,
         text
       ) {
-
         els.statusDot.className =
           "status-dot " + state;
 
@@ -1670,21 +1531,13 @@
           text;
       }
 
-      /*
-       * ============================================================
-       * NOMBRE
-       * ============================================================
-       */
-
       function getValidName() {
-
         const val =
           els.userNameInput.value.trim() ||
           "Jugador_" +
             Math.floor(
               1000 +
-                Math.random() *
-                  9000
+              Math.random() * 9000
             );
 
         localStorage.setItem(
@@ -1695,31 +1548,22 @@
         return val;
       }
 
-      /*
-       * ============================================================
-       * CÓDIGO SALA
-       * ============================================================
-       */
-
       function generate4DigitCode() {
-
         return Math.floor(
           1000 +
-            Math.random() *
-              9000
+          Math.random() * 9000
         ).toString();
       }
 
       /*
-       * ============================================================
+       * ============================
        * CREAR SALA
-       * ============================================================
+       * ============================
        */
 
       els.btnHost.addEventListener(
         "click",
-        async () => {
-
+        () => {
           myName =
             getValidName();
 
@@ -1737,15 +1581,14 @@
       );
 
       /*
-       * ============================================================
+       * ============================
        * UNIRSE
-       * ============================================================
+       * ============================
        */
 
       els.btnJoin.addEventListener(
         "click",
-        async () => {
-
+        () => {
           const code =
             els.joinCodeInput.value.trim();
 
@@ -1766,29 +1609,26 @@
             PEER_PREFIX +
             Math.floor(
               100000 +
-                Math.random() *
-                  900000
+              Math.random() * 900000
             );
 
           initPeer(
             myId,
-            PEER_PREFIX +
-              roomCode
+            PEER_PREFIX + roomCode
           );
         }
       );
 
       /*
-       * ============================================================
+       * ============================
        * PEER
-       * ============================================================
+       * ============================
        */
 
       function initPeer(
         id,
         hostToConnect = null
       ) {
-
         setStatus(
           "connecting",
           "generando código"
@@ -1809,7 +1649,6 @@
         peer.on(
           "open",
           () => {
-
             setStatus(
               "connecting",
               "esperando rivales"
@@ -1860,7 +1699,6 @@
         peer.on(
           "error",
           (err) => {
-
             console.error(err);
 
             showToast(
@@ -1878,50 +1716,26 @@
         );
       }
 
-      /*
-       * ============================================================
-       * DATOS JUGADOR
-       * ============================================================
-       */
-
       function createPlayerData(
         name
       ) {
-
         return {
-
           name: name,
-
           ready: false,
-
           readyNext: false,
-
           row: 0,
-
           finished: false,
-
           won: false,
-
           rank: null,
-
           greens: 0,
-
           yellows: 0,
-
           finishTime: 0
         };
       }
 
-      /*
-       * ============================================================
-       * CONECTAR
-       * ============================================================
-       */
-
       function connectToPeer(
         targetId
       ) {
-
         els.lobbyMsg.textContent =
           "Conectando con la sala...";
 
@@ -1933,26 +1747,16 @@
         const conn =
           peer.connect(targetId);
 
-        attachConnHandlers(
-          conn
-        );
+        attachConnHandlers(conn);
       }
-
-      /*
-       * ============================================================
-       * CONEXIONES
-       * ============================================================
-       */
 
       function attachConnHandlers(
         conn
       ) {
-
         let settled = false;
 
         const timeoutId =
           setTimeout(() => {
-
             if (settled) return;
 
             settled = true;
@@ -1966,7 +1770,6 @@
             ];
 
             if (isHost) {
-
               els.lobbyMsg.textContent =
                 "Un rival no pudo conectar, esperando nuevos jugadores...";
 
@@ -1974,9 +1777,7 @@
                 "connecting",
                 "esperando rivales"
               );
-
             } else {
-
               els.lobbyMsg.textContent =
                 "No se pudo conectar, verifica el código de la sala";
 
@@ -1985,13 +1786,11 @@
                 "sin conectar"
               );
             }
-
           }, CONNECT_TIMEOUT_MS);
 
         conn.on(
           "open",
           () => {
-
             if (settled) return;
 
             settled = true;
@@ -2002,11 +1801,11 @@
 
             if (
               isHost &&
-              Object.keys(players)
-                .length >=
+              Object.keys(
+                players
+              ).length >=
                 MAX_PLAYERS
             ) {
-
               conn.send({
                 type: "full"
               });
@@ -2030,7 +1829,6 @@
 
             conn.send({
               type: "join",
-
               name: myName
             });
           }
@@ -2049,7 +1847,6 @@
         conn.on(
           "close",
           () => {
-
             settled = true;
 
             clearTimeout(
@@ -2079,7 +1876,6 @@
         conn.on(
           "error",
           (err) => {
-
             settled = true;
 
             clearTimeout(
@@ -2095,19 +1891,13 @@
         );
       }
 
-      /*
-       * ============================================================
-       * BROADCAST
-       * ============================================================
-       */
-
-      function broadcast(data) {
-
+      function broadcast(
+        data
+      ) {
         Object.values(
           connections
         ).forEach(
           (c) => {
-
             if (c.open) {
               c.send(data);
             }
@@ -2116,42 +1906,42 @@
       }
 
       /*
-       * ============================================================
-       * RECIBIR DATOS
-       * ============================================================
+       * ============================
+       * MENSAJES PEER
+       * ============================
        */
 
       function handleData(
         senderId,
         data
       ) {
-
         switch (data.type) {
 
           case "full":
-
             showToast(
               "La sala está llena (máximo 7 jugadores)"
             );
 
-            location.reload();
+            setTimeout(
+              () => location.reload(),
+              1000
+            );
 
             break;
 
           case "kicked":
-
             showToast(
               "Has sido expulsado de la sala"
             );
 
-            setTimeout(() => {
-              location.reload();
-            }, 1500);
+            setTimeout(
+              () => location.reload(),
+              1500
+            );
 
             break;
 
           case "join":
-
             players[senderId] =
               createPlayerData(
                 data.name
@@ -2166,7 +1956,6 @@
             break;
 
           case "player-list":
-
             players =
               data.players;
 
@@ -2175,11 +1964,9 @@
             break;
 
           case "ready":
-
             if (
               players[senderId]
             ) {
-
               players[
                 senderId
               ].ready =
@@ -2193,11 +1980,9 @@
             break;
 
           case "ready-next":
-
             if (
               players[senderId]
             ) {
-
               players[
                 senderId
               ].readyNext =
@@ -2205,7 +1990,6 @@
             }
 
             if (isHost) {
-
               updateHostCounter();
 
               broadcastList();
@@ -2214,7 +1998,6 @@
             break;
 
           case "start-countdown":
-
             secretWord =
               data.word;
 
@@ -2223,11 +2006,9 @@
             break;
 
           case "guess":
-
             if (
               players[senderId]
             ) {
-
               players[
                 senderId
               ].row =
@@ -2253,11 +2034,9 @@
             break;
 
           case "finish":
-
             if (
               players[senderId]
             ) {
-
               players[
                 senderId
               ].finished =
@@ -2295,11 +2074,11 @@
               }
 
               if (
-                Object.keys(players)
-                  .length === 2 &&
+                Object.keys(
+                  players
+                ).length === 2 &&
                 !data.won
               ) {
-
                 resolveDuelLoss(
                   senderId
                 );
@@ -2312,32 +2091,22 @@
         }
       }
 
-      /*
-       * ============================================================
-       * LISTA JUGADORES
-       * ============================================================
-       */
-
       function broadcastList() {
-
         broadcast({
-
           type: "player-list",
-
           players
         });
       }
 
       /*
-       * ============================================================
+       * ============================
        * EXPULSAR
-       * ============================================================
+       * ============================
        */
 
       function kickPlayer(
         targetId
       ) {
-
         if (
           !isHost ||
           !connections[targetId]
@@ -2352,11 +2121,9 @@
         });
 
         setTimeout(() => {
-
           if (
             connections[targetId]
           ) {
-
             connections[
               targetId
             ].close();
@@ -2381,18 +2148,10 @@
           showToast(
             "Jugador expulsado"
           );
-
         }, 200);
       }
 
-      /*
-       * ============================================================
-       * UI JUGADORES
-       * ============================================================
-       */
-
       function updatePlayersUI() {
-
         els.playersList.innerHTML =
           "";
 
@@ -2400,7 +2159,6 @@
           players
         ).forEach(
           ([id, p]) => {
-
             const item =
               document.createElement(
                 "div"
@@ -2415,21 +2173,18 @@
 
             item.innerHTML = `
               <div class="player-info-group">
-
                 <span>
                   ${p.name}
-
                   ${
                     id === myId
                       ? "<strong>(Tú)</strong>"
                       : ""
                   }
-
                   ${
                     id ===
                     PEER_PREFIX +
                       roomCode
-                      ? "👑"
+                      ? " 👑"
                       : ""
                   }
                 </span>
@@ -2446,7 +2201,6 @@
                     `
                     : ""
                 }
-
               </div>
 
               <span
@@ -2465,16 +2219,16 @@
             `;
 
             if (showKick) {
-
               item
                 .querySelector(
                   `[data-kick="${id}"]`
                 )
                 .addEventListener(
                   "click",
-                  () => {
-                    kickPlayer(id);
-                  }
+                  () =>
+                    kickPlayer(
+                      id
+                    )
                 );
             }
 
@@ -2488,15 +2242,14 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * READY
-       * ============================================================
+       * ============================
        */
 
       els.btnReady.addEventListener(
         "click",
         () => {
-
           isReady = !isReady;
 
           players[myId].ready =
@@ -2519,25 +2272,19 @@
           } else {
             broadcast({
               type: "ready",
-
               ready: isReady
             });
           }
         }
       );
 
-      /*
-       * ============================================================
-       * COMPROBAR READY
-       * ============================================================
-       */
-
       function checkAllReady() {
-
         if (!isHost) return;
 
         const pList =
-          Object.values(players);
+          Object.values(
+            players
+          );
 
         const canStart =
           pList.length >= 2 &&
@@ -2550,15 +2297,14 @@
       }
 
       /*
-       * ============================================================
-       * START
-       * ============================================================
+       * ============================
+       * EMPEZAR PARTIDA
+       * ============================
        */
 
       els.btnStartGame.addEventListener(
         "click",
         () => {
-
           if (!isHost) return;
 
           secretWord =
@@ -2570,26 +2316,16 @@
             ];
 
           broadcast({
-
             type:
               "start-countdown",
-
-            word:
-              secretWord
+            word: secretWord
           });
 
           startCountdown();
         }
       );
 
-      /*
-       * ============================================================
-       * COUNTDOWN
-       * ============================================================
-       */
-
       function startCountdown() {
-
         els.screenLobby.classList.add(
           "hidden"
         );
@@ -2609,17 +2345,15 @@
 
         const timer =
           setInterval(() => {
-
             count--;
 
             if (count > 0) {
-
               els.countdownNumber.textContent =
                 count;
-
             } else {
-
-              clearInterval(timer);
+              clearInterval(
+                timer
+              );
 
               els.countdownOverlay.classList.add(
                 "hidden"
@@ -2627,18 +2361,16 @@
 
               startGame();
             }
-
           }, 900);
       }
 
       /*
-       * ============================================================
-       * START GAME
-       * ============================================================
+       * ============================
+       * INICIAR PARTIDA
+       * ============================
        */
 
       function startGame() {
-
         currentRow = 0;
 
         currentCol = 0;
@@ -2658,27 +2390,34 @@
         isReadyNextRound =
           false;
 
-        Object.keys(players)
-          .forEach((id) => {
-
+        Object.keys(
+          players
+        ).forEach(
+          (id) => {
             players[id].row = 0;
 
             players[id].finished =
               false;
 
-            players[id].won = false;
+            players[id].won =
+              false;
 
-            players[id].rank = null;
+            players[id].rank =
+              null;
 
-            players[id].greens = 0;
+            players[id].greens =
+              0;
 
-            players[id].yellows = 0;
+            players[id].yellows =
+              0;
 
-            players[id].finishTime = 0;
+            players[id].finishTime =
+              0;
 
             players[id].readyNext =
               false;
-          });
+          }
+        );
 
         els.btnPlayerReadyNext.textContent =
           "Listo para otra ronda";
@@ -2705,13 +2444,18 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * TABLERO
-       * ============================================================
+       *
+       * IMPORTANTE:
+       * Ya NO usamos inputs.
+       *
+       * Esto evita que en móvil aparezca
+       * el teclado del sistema.
+       * ============================
        */
 
       function buildMyBoard() {
-
         els.boardMe.innerHTML =
           "";
 
@@ -2720,34 +2464,21 @@
           r < 6;
           r++
         ) {
-
-          const rowForm =
+          const row =
             document.createElement(
-              "form"
+              "div"
             );
 
-          rowForm.className =
+          row.className =
             "board-row";
 
-          rowForm.dataset.row =
-            r;
-
-          rowForm.addEventListener(
-            "submit",
-            (e) => {
-
-              e.preventDefault();
-
-              submitGuess();
-            }
-          );
+          row.dataset.row = r;
 
           for (
             let c = 0;
             c < 5;
             c++
           ) {
-
             const wrap =
               document.createElement(
                 "div"
@@ -2771,126 +2502,23 @@
               "tile";
 
             /*
-             * Input invisible.
+             * Tocar una casilla solo
+             * cambia la posición.
              *
-             * IMPORTANTE:
-             * No usamos focus automático desde el
-             * teclado virtual, así evitamos abrir el
-             * teclado nativo del móvil.
+             * NO se enfoca ningún input.
              */
-
-            const input =
-              document.createElement(
-                "input"
-              );
-
-            input.type = "text";
-
-            input.className =
-              "tile-native-input";
-
-            input.value = "";
-
-            input.setAttribute(
-              "autocomplete",
-              "off"
-            );
-
-            input.setAttribute(
-              "autocorrect",
-              "off"
-            );
-
-            input.setAttribute(
-              "autocapitalize",
-              "characters"
-            );
-
-            input.setAttribute(
-              "enterkeyhint",
-              "go"
-            );
-
-            input.addEventListener(
-              "focus",
+            tile.addEventListener(
+              "click",
               () => {
-
-                focusTile(
-                  r,
-                  c
-                );
-              }
-            );
-
-            input.addEventListener(
-              "input",
-              (e) => {
-
                 if (
-                  players[myId]
+                  r === currentRow &&
+                  !players[myId]
                     .finished
                 ) {
-                  return;
-                }
-
-                const val =
-                  e.target.value
-                    .toUpperCase()
-                    .replace(
-                      /[^A-ZÑ]/g,
-                      ""
-                    );
-
-                if (val) {
-
-                  setLetter(
+                  focusTile(
                     r,
-                    c,
-                    val.slice(-1)
+                    c
                   );
-
-                  if (c < 4) {
-
-                    focusTile(
-                      r,
-                      c + 1
-                    );
-                  }
-                }
-
-                input.value = "";
-              }
-            );
-
-            input.addEventListener(
-              "keydown",
-              (e) => {
-
-                if (
-                  players[myId]
-                    .finished
-                ) {
-                  return;
-                }
-
-                if (
-                  e.key === "Enter" ||
-                  e.keyCode === 13
-                ) {
-
-                  e.preventDefault();
-
-                  submitGuess();
-
-                } else if (
-                  e.key ===
-                    "Backspace" ||
-                  e.keyCode === 8
-                ) {
-
-                  e.preventDefault();
-
-                  deleteLetter();
                 }
               }
             );
@@ -2899,44 +2527,42 @@
               tile
             );
 
-            wrap.appendChild(
-              input
-            );
-
-            rowForm.appendChild(
+            row.appendChild(
               wrap
             );
           }
 
           els.boardMe.appendChild(
-            rowForm
+            row
           );
         }
       }
 
       /*
-       * ============================================================
-       * NUEVO TECLADO VIRTUAL
-       * ============================================================
+       * ============================
+       * TECLADO VIRTUAL
+       * ============================
        *
-       * 3 filas:
+       * IMPORTANTE:
        *
-       * Q W E R T Y U I O P
-       * A S D F G H J K L Ñ
-       * ENTER Z X C V B N M BORRAR
+       * Cada tecla tiene UN SOLO
+       * listener "click".
        *
-       * No hacemos focus() sobre los inputs al pulsar una tecla.
-       * Así el móvil no abre su teclado nativo.
+       * No hay touchstart.
+       * No hay touchend.
+       * No hay pointerdown.
+       *
+       * Así evitamos que una pulsación
+       * móvil introduzca dos letras.
+       * ============================
        */
 
       function buildVirtualKeyboard() {
-
         els.virtualKeyboard.innerHTML =
           "";
 
         KEYBOARD_LAYOUT.forEach(
           (rowKeys, rowIndex) => {
-
             const rowDiv =
               document.createElement(
                 "div"
@@ -2947,11 +2573,13 @@
 
             rowKeys.forEach(
               (key) => {
-
                 const keyDiv =
                   document.createElement(
-                    "div"
+                    "button"
                   );
+
+                keyDiv.type =
+                  "button";
 
                 keyDiv.className =
                   "key-tile";
@@ -2959,89 +2587,46 @@
                 keyDiv.dataset.key =
                   key;
 
-                /*
-                 * ENTER
-                 */
-
-                if (key === "ENTER") {
-
+                if (
+                  key === "ENTER"
+                ) {
                   keyDiv.classList.add(
-                    "key-action"
+                    "action",
+                    "enter"
                   );
 
                   keyDiv.textContent =
-                    "ENTER";
-
-                /*
-                 * BORRAR
-                 */
-
+                    "↵";
                 } else if (
-                  key === "BACKSPACE"
+                  key ===
+                  "BACKSPACE"
                 ) {
-
                   keyDiv.classList.add(
-                    "key-delete"
+                    "action",
+                    "backspace"
                   );
 
                   keyDiv.textContent =
                     "⌫";
-
-                /*
-                 * LETRAS
-                 */
-
                 } else {
-
                   keyDiv.textContent =
                     key;
                 }
 
                 /*
-                 * -------------------------------------------------
-                 * CLICK
-                 * -------------------------------------------------
+                 * UN ÚNICO EVENTO.
+                 *
+                 * Esto es lo importante
+                 * para evitar letras dobles.
                  */
-
                 keyDiv.addEventListener(
                   "click",
                   (event) => {
-
                     event.preventDefault();
 
                     handleVirtualKey(
                       key
                     );
-                  }
-                );
-
-                /*
-                 * -------------------------------------------------
-                 * TOUCH
-                 * -------------------------------------------------
-                 *
-                 * Usamos pointerdown para que responda
-                 * instantáneamente en móvil.
-                 *
-                 * preventDefault evita comportamientos
-                 * nativos del navegador.
-                 */
-
-                keyDiv.addEventListener(
-                  "pointerdown",
-                  (event) => {
-
-                    event.preventDefault();
-
-                    if (
-                      event.pointerType ===
-                      "touch"
-                    ) {
-
-                      handleVirtualKey(
-                        key
-                      );
-                    }
                   }
                 );
 
@@ -3059,15 +2644,14 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * MANEJAR TECLA VIRTUAL
-       * ============================================================
+       * ============================
        */
 
       function handleVirtualKey(
         key
       ) {
-
         if (
           !players[myId] ||
           players[myId].finished
@@ -3076,187 +2660,282 @@
         }
 
         /*
-         * ENTER
+         * Evitamos cualquier posibilidad
+         * de que el navegador mantenga el
+         * foco en algún elemento editable.
          */
+        if (
+          document.activeElement &&
+          (
+            document.activeElement.tagName ===
+              "INPUT" ||
+            document.activeElement.tagName ===
+              "TEXTAREA"
+          )
+        ) {
+          document.activeElement.blur();
+        }
 
-        if (key === "ENTER") {
-
+        if (
+          key === "ENTER"
+        ) {
           submitGuess();
 
           return;
         }
 
-        /*
-         * BORRAR
-         */
-
         if (
           key === "BACKSPACE"
         ) {
-
-          deleteLetter();
+          handleBackspace();
 
           return;
         }
 
         /*
-         * LETRA
+         * Es una letra normal.
          */
-
         if (
-          /^[A-ZÑ]$/.test(key)
+          /^[A-ZÑ]$/.test(
+            key
+          )
         ) {
-
-          /*
-           * Si estamos en una posición que ya tiene
-           * una letra, avanzamos hasta encontrar
-           * el siguiente hueco.
-           */
-
-          let col =
-            currentCol;
-
-          while (
-            col < 5 &&
-            rowBuffers[
-              currentRow
-            ][col]
-          ) {
-
-            col++;
-          }
-
-          /*
-           * Si la fila está llena no añadimos más.
-           */
-
-          if (col >= 5) {
-            return;
-          }
-
-          setLetter(
-            currentRow,
-            col,
+          handleLetter(
             key
           );
-
-          /*
-           * Movemos el cursor lógico,
-           * pero NO hacemos focus() sobre el input.
-           *
-           * Esto es lo que evita que se abra
-           * el teclado del móvil.
-           */
-
-          if (col < 4) {
-
-            currentCol =
-              col + 1;
-
-          } else {
-
-            currentCol = 4;
-          }
-
-          updateFocusedVisual();
         }
       }
 
       /*
-       * ============================================================
-       * BORRAR LETRA
-       * ============================================================
+       * ============================
+       * ESCRIBIR LETRA
+       * ============================
        */
 
-      function deleteLetter() {
-
+      function handleLetter(
+        letter
+      ) {
         if (
-          !players[myId] ||
           players[myId].finished
         ) {
           return;
         }
 
+        if (
+          currentRow >= 6
+        ) {
+          return;
+        }
+
+        /*
+         * Si la posición actual ya
+         * contiene letra, buscamos la
+         * siguiente libre.
+         */
         let col =
           currentCol;
 
-        /*
-         * Si la posición actual está vacía,
-         * retrocedemos una posición.
-         */
-
-        if (
-          !rowBuffers[
+        while (
+          col < 5 &&
+          rowBuffers[
             currentRow
-          ][col] &&
-          col > 0
+          ][col]
         ) {
+          col++;
+        }
 
-          col--;
+        if (col >= 5) {
+          return;
         }
 
         setLetter(
           currentRow,
           col,
-          ""
+          letter
         );
 
-        currentCol =
-          col;
+        /*
+         * Después de escribir:
+         *
+         * si no estamos al final,
+         * avanzamos.
+         */
+        if (col < 4) {
+          currentCol =
+            col + 1;
 
-        updateFocusedVisual();
-      }
-
-      /*
-       * ============================================================
-       * FOCO VISUAL
-       * ============================================================
-       */
-
-      function updateFocusedVisual() {
-
-        document
-          .querySelectorAll(
-            ".tile-wrap"
-          )
-          .forEach(
-            (w) => {
-              w.classList.remove(
-                "focused"
-              );
-            }
+          focusTile(
+            currentRow,
+            currentCol
           );
+        } else {
+          currentCol = 4;
 
-        const wrap =
-          els.boardMe.querySelector(
-            `.tile-wrap[data-row="${currentRow}"][data-col="${currentCol}"]`
-          );
-
-        if (wrap) {
-
-          wrap.classList.add(
-            "focused"
+          focusTile(
+            currentRow,
+            4
           );
         }
       }
 
       /*
-       * ============================================================
-       * KEYBOARD STATES
-       * ============================================================
+       * ============================
+       * BORRAR
+       * ============================
+       */
+
+      function handleBackspace() {
+        if (
+          players[myId].finished
+        ) {
+          return;
+        }
+
+        const row =
+          rowBuffers[
+            currentRow
+          ];
+
+        /*
+         * Si la casilla actual
+         * tiene letra, la borramos.
+         */
+        if (
+          row[currentCol]
+        ) {
+          setLetter(
+            currentRow,
+            currentCol,
+            ""
+          );
+
+          return;
+        }
+
+        /*
+         * Si está vacía y no estamos
+         * en la primera columna,
+         * retrocedemos y borramos.
+         */
+        if (
+          currentCol > 0
+        ) {
+          currentCol--;
+
+          setLetter(
+            currentRow,
+            currentCol,
+            ""
+          );
+
+          focusTile(
+            currentRow,
+            currentCol
+          );
+        }
+      }
+
+      /*
+       * ============================
+       * TECLADO FÍSICO
+       * ============================
+       *
+       * También permite jugar desde
+       * PC sin mostrar ningún input.
+       * ============================
+       */
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            els.screenGame.classList.contains(
+              "hidden"
+            )
+          ) {
+            return;
+          }
+
+          if (
+            !players[myId] ||
+            players[myId].finished
+          ) {
+            return;
+          }
+
+          /*
+           * No interferimos con los
+           * inputs del lobby.
+           */
+          const active =
+            document.activeElement;
+
+          if (
+            active &&
+            (
+              active.id ===
+                "userNameInput" ||
+              active.id ===
+                "joinCodeInput"
+            )
+          ) {
+            return;
+          }
+
+          if (
+            event.key === "Enter"
+          ) {
+            event.preventDefault();
+
+            submitGuess();
+
+            return;
+          }
+
+          if (
+            event.key ===
+              "Backspace"
+          ) {
+            event.preventDefault();
+
+            handleBackspace();
+
+            return;
+          }
+
+          const key =
+            event.key
+              .toUpperCase();
+
+          if (
+            /^[A-ZÑ]$/.test(
+              key
+            )
+          ) {
+            event.preventDefault();
+
+            handleLetter(
+              key
+            );
+          }
+        }
+      );
+
+      /*
+       * ============================
+       * ACTUALIZAR TECLADO
+       * ============================
        */
 
       function updateVirtualKeyboard(
         word,
         pattern
       ) {
-
         for (
           let i = 0;
           i < 5;
           i++
         ) {
-
           const letter =
             word[i];
 
@@ -3264,13 +2943,12 @@
             pattern[i];
 
           if (
-            status === "correct"
+            status ===
+            "correct"
           ) {
-
             keyStates[
               letter
             ] = "correct";
-
           } else if (
             status ===
               "present" &&
@@ -3278,17 +2956,16 @@
               letter
             ] !== "correct"
           ) {
-
             keyStates[
               letter
             ] = "present";
-
           } else if (
             status ===
               "absent" &&
-            !keyStates[letter]
+            !keyStates[
+              letter
+            ]
           ) {
-
             keyStates[
               letter
             ] = "absent";
@@ -3299,14 +2976,12 @@
           keyStates
         ).forEach(
           ([letter, state]) => {
-
             const keyEl =
               els.virtualKeyboard.querySelector(
                 `.key-tile[data-key="${letter}"]`
               );
 
             if (keyEl) {
-
               keyEl.classList.remove(
                 "correct",
                 "present",
@@ -3322,22 +2997,15 @@
       }
 
       /*
-       * ============================================================
-       * FOCUS TILE
-       * ============================================================
-       *
-       * Esta función se utiliza para teclado físico.
-       *
-       * El teclado virtual NO llama a focusTile(),
-       * precisamente para evitar que el teclado del móvil
-       * aparezca.
+       * ============================
+       * FOCO VISUAL
+       * ============================
        */
 
       function focusTile(
         r,
         c
       ) {
-
         if (
           r !== currentRow ||
           players[myId].finished
@@ -3347,7 +3015,16 @@
 
         currentCol = c;
 
-        updateFocusedVisual();
+        document
+          .querySelectorAll(
+            ".tile-wrap"
+          )
+          .forEach(
+            (w) =>
+              w.classList.remove(
+                "focused"
+              )
+          );
 
         const wrap =
           els.boardMe.querySelector(
@@ -3355,34 +3032,16 @@
           );
 
         if (wrap) {
-
-          const inp =
-            wrap.querySelector(
-              ".tile-native-input"
-            );
-
-          /*
-           * Solo damos focus si el usuario está
-           * utilizando el input real.
-           */
-
-          if (
-            document.activeElement !==
-            inp
-          ) {
-
-            /*
-             * No hacemos focus en móvil desde
-             * llamadas producidas por el teclado virtual.
-             */
-          }
+          wrap.classList.add(
+            "focused"
+          );
         }
       }
 
       /*
-       * ============================================================
-       * LETRA
-       * ============================================================
+       * ============================
+       * PONER LETRA EN TABLERO
+       * ============================
        */
 
       function setLetter(
@@ -3390,7 +3049,6 @@
         c,
         letter
       ) {
-
         rowBuffers[r][c] =
           letter;
 
@@ -3400,7 +3058,6 @@
           );
 
         if (wrap) {
-
           wrap.querySelector(
             ".tile"
           ).textContent =
@@ -3409,13 +3066,12 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * TABLEROS RIVALES
-       * ============================================================
+       * ============================
        */
 
       function buildRivalBoards() {
-
         els.rivalsGrid.innerHTML =
           "";
 
@@ -3423,9 +3079,9 @@
           players
         ).forEach(
           ([id, p]) => {
-
-            if (id === myId)
+            if (id === myId) {
               return;
+            }
 
             const card =
               document.createElement(
@@ -3440,17 +3096,10 @@
 
             card.innerHTML = `
               <div class="rival-header">
-
-                <span>
-                  ${p.name}
-                </span>
-
-                <span
-                  id="rival-att-${id}"
-                >
+                <span>${p.name}</span>
+                <span id="rival-att-${id}">
                   0/6
                 </span>
-
               </div>
 
               <div
@@ -3469,7 +3118,6 @@
               r < 6;
               r++
             ) {
-
               const row =
                 document.createElement(
                   "div"
@@ -3486,7 +3134,6 @@
                 c < 5;
                 c++
               ) {
-
                 const wrap =
                   document.createElement(
                     "div"
@@ -3524,18 +3171,11 @@
         );
       }
 
-      /*
-       * ============================================================
-       * ACTUALIZAR RIVAL
-       * ============================================================
-       */
-
       function updateRivalBoard(
         rivalId,
         r,
         pattern
       ) {
-
         const card =
           document.getElementById(
             `rival-card-${rivalId}`
@@ -3562,7 +3202,6 @@
 
         tiles.forEach(
           (t, i) => {
-
             t.classList.add(
               pattern[i]
             );
@@ -3571,17 +3210,18 @@
       }
 
       /*
-       * ============================================================
-       * RESOLVER 1 VS 1
-       * ============================================================
+       * ============================
+       * RESOLVER DERROTA 1 VS 1
+       * ============================
        */
 
       function resolveDuelLoss(
         loserId
       ) {
-
         const playerIds =
-          Object.keys(players);
+          Object.keys(
+            players
+          );
 
         if (
           playerIds.length !== 2
@@ -3609,18 +3249,19 @@
 
         loser.rank = 2;
 
-        loser.finished = true;
+        loser.finished =
+          true;
 
         winner.won = true;
 
         winner.rank = 1;
 
-        winner.finished = true;
+        winner.finished =
+          true;
 
         if (
           !winner.finishTime
         ) {
-
           winner.finishTime =
             Date.now();
         }
@@ -3629,13 +3270,12 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * ENVIAR PALABRA
-       * ============================================================
+       * ============================
        */
 
       function submitGuess() {
-
         if (
           players[myId].finished
         ) {
@@ -3650,10 +3290,11 @@
         if (
           word.length < 5
         ) {
-
-          return showToast(
+          showToast(
             "Completa las 5 letras"
           );
+
+          return;
         }
 
         const pattern =
@@ -3675,13 +3316,15 @@
         const currentGreens =
           pattern.filter(
             (p) =>
-              p === "correct"
+              p ===
+              "correct"
           ).length;
 
         const currentYellows =
           pattern.filter(
             (p) =>
-              p === "present"
+              p ===
+              "present"
           ).length;
 
         players[myId].greens +=
@@ -3691,12 +3334,11 @@
           currentYellows;
 
         broadcast({
-
           type: "guess",
 
           row: currentRow,
 
-          pattern,
+          pattern: pattern,
 
           greens:
             players[myId]
@@ -3710,15 +3352,17 @@
         const won =
           pattern.every(
             (p) =>
-              p === "correct"
+              p ===
+              "correct"
           );
 
         /*
-         * GANÓ
+         * ============================
+         * GANADOR
+         * ============================
          */
 
         if (won) {
-
           players[myId].finished =
             true;
 
@@ -3736,11 +3380,15 @@
           players[myId].rank =
             rank;
 
-          if (
-            Object.keys(players)
-              .length === 2
-          ) {
+          /*
+           * 1 VS 1
+           */
 
+          if (
+            Object.keys(
+              players
+            ).length === 2
+          ) {
             const opponentId =
               Object.keys(
                 players
@@ -3749,8 +3397,9 @@
                   id !== myId
               );
 
-            if (opponentId) {
-
+            if (
+              opponentId
+            ) {
               players[
                 opponentId
               ].won = false;
@@ -3768,12 +3417,11 @@
           finishedCount++;
 
           broadcast({
-
             type: "finish",
 
             won: true,
 
-            rank,
+            rank: rank,
 
             greens:
               players[myId]
@@ -3793,15 +3441,17 @@
           );
 
           checkGameEnd();
+        }
 
         /*
+         * ============================
          * AGOTÓ INTENTOS
+         * ============================
          */
 
-        } else if (
+        else if (
           currentRow >= 5
         ) {
-
           players[myId].finished =
             true;
 
@@ -3817,17 +3467,16 @@
           finishedCount++;
 
           if (
-            Object.keys(players)
-              .length === 2
+            Object.keys(
+              players
+            ).length === 2
           ) {
-
             resolveDuelLoss(
               myId
             );
           }
 
           broadcast({
-
             type: "finish",
 
             won: false,
@@ -3856,40 +3505,37 @@
             "Has agotado tus intentos"
           );
 
-          if (
-            document.activeElement
-          ) {
-
-            document.activeElement.blur();
-          }
-
           checkGameEnd();
+        }
 
         /*
+         * ============================
          * SIGUIENTE FILA
+         * ============================
          */
 
-        } else {
-
+        else {
           currentRow++;
 
           currentCol = 0;
 
-          updateFocusedVisual();
+          focusTile(
+            currentRow,
+            0
+          );
         }
       }
 
       /*
-       * ============================================================
-       * EVALUAR
-       * ============================================================
+       * ============================
+       * EVALUAR PALABRA
+       * ============================
        */
 
       function evaluateGuess(
         guess,
         target
       ) {
-
         const res =
           Array(5).fill(
             "absent"
@@ -3908,12 +3554,10 @@
           i < 5;
           i++
         ) {
-
           if (
             guess[i] ===
             tArr[i]
           ) {
-
             res[i] =
               "correct";
 
@@ -3927,7 +3571,6 @@
           i < 5;
           i++
         ) {
-
           if (
             res[i] ===
             "correct"
@@ -3939,13 +3582,13 @@
             tArr.findIndex(
               (l, j) =>
                 !used[j] &&
-                l === guess[i]
+                l ===
+                  guess[i]
             );
 
           if (
             idx !== -1
           ) {
-
             res[i] =
               "present";
 
@@ -3958,20 +3601,21 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * PINTAR FILA
-       * ============================================================
+       * ============================
        */
 
       function paintRow(
         r,
         pattern
       ) {
-
         const row =
           els.boardMe.querySelector(
             `.board-row[data-row="${r}"]`
           );
+
+        if (!row) return;
 
         const wraps =
           row.querySelectorAll(
@@ -3980,7 +3624,6 @@
 
         wraps.forEach(
           (w, i) => {
-
             w.querySelector(
               ".tile"
             ).classList.add(
@@ -3991,13 +3634,12 @@
       }
 
       /*
-       * ============================================================
-       * FIN DE PARTIDA
-       * ============================================================
+       * ============================
+       * FINAL DE PARTIDA
+       * ============================
        */
 
       function checkGameEnd() {
-
         const totalPlayers =
           Object.keys(
             players
@@ -4010,7 +3652,6 @@
         if (
           totalPlayers === 2
         ) {
-
           const duelWinner =
             Object.entries(
               players
@@ -4019,8 +3660,9 @@
                 p.won
             );
 
-          if (duelWinner) {
-
+          if (
+            duelWinner
+          ) {
             const winnerId =
               duelWinner[0];
 
@@ -4029,7 +3671,8 @@
                 players
               ).find(
                 ([id]) =>
-                  id !== winnerId
+                  id !==
+                  winnerId
               );
 
             players[
@@ -4044,18 +3687,17 @@
               winnerId
             ].finished = true;
 
-            if (loserEntry) {
-
+            if (
+              loserEntry
+            ) {
               const loser =
                 players[
                   loserEntry[0]
                 ];
 
-              loser.won =
-                false;
+              loser.won = false;
 
-              loser.rank =
-                2;
+              loser.rank = 2;
 
               loser.finished =
                 true;
@@ -4082,7 +3724,6 @@
             someoneLost &&
             finishedCount >= 1
           ) {
-
             const loserEntry =
               Object.entries(
                 players
@@ -4092,8 +3733,9 @@
                   !p.won
               );
 
-            if (loserEntry) {
-
+            if (
+              loserEntry
+            ) {
               resolveDuelLoss(
                 loserEntry[0]
               );
@@ -4111,7 +3753,7 @@
         }
 
         /*
-         * 3+ JUGADORES
+         * 3 O MÁS
          */
 
         const winners =
@@ -4130,18 +3772,15 @@
           finishedCount >=
           totalPlayers
         ) {
-
           setTimeout(
             showFinalResults,
             800
           );
-
         } else if (
           activePlayers === 1 &&
           winners ===
             totalPlayers - 1
         ) {
-
           setTimeout(
             showFinalResults,
             800
@@ -4150,13 +3789,12 @@
       }
 
       /*
-       * ============================================================
-       * CONTADOR SIGUIENTE RONDA
-       * ============================================================
+       * ============================
+       * CONTADOR READY NEXT
+       * ============================
        */
 
       function updateHostCounter() {
-
         if (!isHost) return;
 
         const nonHostPlayers =
@@ -4178,13 +3816,12 @@
       }
 
       /*
-       * ============================================================
+       * ============================
        * RESULTADOS
-       * ============================================================
+       * ============================
        */
 
       function showFinalResults() {
-
         els.resultOverlay.classList.remove(
           "hidden"
         );
@@ -4200,10 +3837,9 @@
             players
           ).sort(
             (a, b) => {
-
               /*
                * 1 VS 1:
-               * SOLO RANK.
+               * solo importa rank.
                */
 
               if (
@@ -4211,7 +3847,6 @@
                   players
                 ).length === 2
               ) {
-
                 return (
                   (a.rank ??
                     999) -
@@ -4221,31 +3856,32 @@
               }
 
               /*
-               * 3+
+               * Partidas de más
+               * de dos jugadores.
                */
 
               if (
                 a.won &&
                 b.won
               ) {
-
                 return (
                   a.rank -
                   b.rank
                 );
               }
 
-              if (a.won)
+              if (a.won) {
                 return -1;
+              }
 
-              if (b.won)
+              if (b.won) {
                 return 1;
+              }
 
               if (
                 b.greens !==
                 a.greens
               ) {
-
                 return (
                   b.greens -
                   a.greens
@@ -4256,7 +3892,6 @@
                 b.yellows !==
                 a.yellows
               ) {
-
                 return (
                   b.yellows -
                   a.yellows
@@ -4272,7 +3907,6 @@
 
         sorted.forEach(
           (p, idx) => {
-
             const item =
               document.createElement(
                 "div"
@@ -4288,23 +3922,18 @@
               "var(--text)";
 
             if (p.won) {
-
               statusText =
                 `#${p.rank} (Ganador)`;
 
               statusColor =
                 "var(--green)";
-
             } else {
-
               statusColor =
                 "var(--red)";
             }
 
             item.innerHTML = `
-
               <div>
-
                 <span
                   style="
                     font-weight:700;
@@ -4313,10 +3942,7 @@
                   ${p.name}
                 </span>
 
-                <div
-                  class="leaderboard-stats"
-                >
-
+                <div class="leaderboard-stats">
                   <span>
                     🟩 ${p.greens}
                   </span>
@@ -4324,9 +3950,7 @@
                   <span>
                     🟨 ${p.yellows}
                   </span>
-
                 </div>
-
               </div>
 
               <strong
@@ -4345,7 +3969,6 @@
         );
 
         if (isHost) {
-
           els.btnNextRound.classList.remove(
             "hidden"
           );
@@ -4359,9 +3982,7 @@
           );
 
           updateHostCounter();
-
         } else {
-
           els.btnNextRound.classList.add(
             "hidden"
           );
@@ -4377,20 +3998,18 @@
       }
 
       /*
-       * ============================================================
-       * READY SIGUIENTE
-       * ============================================================
+       * ============================
+       * READY SIGUIENTE RONDA
+       * ============================
        */
 
       els.btnPlayerReadyNext.addEventListener(
         "click",
         () => {
-
           isReadyNextRound =
             !isReadyNextRound;
 
-          players[myId]
-            .readyNext =
+          players[myId].readyNext =
             isReadyNextRound;
 
           els.btnPlayerReadyNext.textContent =
@@ -4404,9 +4023,7 @@
               : "var(--green)";
 
           broadcast({
-
-            type:
-              "ready-next",
+            type: "ready-next",
 
             readyNext:
               isReadyNextRound
@@ -4415,17 +4032,17 @@
       );
 
       /*
-       * ============================================================
+       * ============================
        * SIGUIENTE RONDA
-       * ============================================================
+       * ============================
        */
 
       els.btnNextRound.addEventListener(
         "click",
         () => {
-
-          if (!isHost)
+          if (!isHost) {
             return;
+          }
 
           secretWord =
             WORDS[
@@ -4436,7 +4053,6 @@
             ];
 
           broadcast({
-
             type:
               "start-countdown",
 
@@ -4449,101 +4065,15 @@
       );
 
       /*
-       * ============================================================
-       * VOLVER
-       * ============================================================
+       * ============================
+       * VOLVER AL LOBBY
+       * ============================
        */
 
       els.btnBackLobby.addEventListener(
         "click",
         () => {
-
           location.reload();
-        }
-      );
-
-      /*
-       * ============================================================
-       * TECLADO FÍSICO
-       * ============================================================
-       *
-       * Esto permite jugar también desde PC sin necesidad
-       * de pulsar el teclado virtual.
-       */
-
-      document.addEventListener(
-        "keydown",
-        (event) => {
-
-          /*
-           * Si estamos fuera de la partida,
-           * no hacemos nada.
-           */
-
-          if (
-            els.screenGame.classList.contains(
-              "hidden"
-            )
-          ) {
-            return;
-          }
-
-          if (
-            !players[myId] ||
-            players[myId].finished
-          ) {
-            return;
-          }
-
-          /*
-           * ENTER
-           */
-
-          if (
-            event.key === "Enter"
-          ) {
-
-            event.preventDefault();
-
-            submitGuess();
-
-            return;
-          }
-
-          /*
-           * BORRAR
-           */
-
-          if (
-            event.key ===
-              "Backspace"
-          ) {
-
-            event.preventDefault();
-
-            deleteLetter();
-
-            return;
-          }
-
-          /*
-           * LETRAS
-           */
-
-          const key =
-            event.key
-              .toUpperCase();
-
-          if (
-            /^[A-ZÑ]$/.test(key)
-          ) {
-
-            event.preventDefault();
-
-            handleVirtualKey(
-              key
-            );
-          }
         }
       );
 
