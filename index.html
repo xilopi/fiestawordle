@@ -7,24 +7,25 @@
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --panel-bg: #161616;
-            --panel-border: #262626;
-            --text-main: #f3f3f3;
-            --text-muted: #888888;
-            --accent: #ff6b35;
+            --bg-color: #0e0e0e;
+            --panel-bg: #111111;
+            --input-bg: #151515;
+            --border-color: #1a1a1a;
+            --text-main: #f0f0f0;
+            --text-muted: #555555;
+            --accent: #ff6b35; /* El naranja que tenías */
             --correct: #538d4e;
             --present: #b59f3b;
             --absent: #2a2a2a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
         body {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'JetBrains Mono', monospace;
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
@@ -33,179 +34,276 @@
             align-items: center;
         }
 
+        /* HEADER ORIGINAL (Estilo consola) */
         header {
             width: 100%;
-            max-width: 900px;
-            padding: 20px;
+            max-width: 1000px;
+            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--panel-border);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 800;
             letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            text-transform: uppercase;
         }
 
         .logo::before {
             content: '◆';
             color: var(--accent);
+            font-size: 16px;
         }
 
         .status-badge {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            background: #1c1c1c;
-            border: 1px solid var(--panel-border);
-            padding: 6px 12px;
+            font-size: 12px;
+            background: #181818;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
             border-radius: 20px;
             color: var(--text-muted);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            text-transform: uppercase;
         }
 
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #444; transition: background 0.2s; }
         .dot.online { background: #10b981; }
 
         .main-container {
             width: 100%;
-            max-width: 900px;
-            padding: 40px 20px;
+            max-width: 1000px;
+            padding: 50px 25px;
         }
 
-        /* LOBBY INTERFACE */
+        /* ESTILOS DE PANTALLA INICIAL (Lobby) */
+        .lobby-hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
         .hero-title {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
         }
 
         .hero-sub {
             color: var(--text-muted);
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 30px;
+            font-size: 14px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .input-group {
-            margin-bottom: 25px;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
         }
 
-        label {
+        label.terminal-label {
             display: block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        input[type="text"] {
+        input[type="text"].terminal-input {
             width: 100%;
-            background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 14px;
+            padding: 16px 20px;
             color: white;
             font-family: 'JetBrains Mono', monospace;
             font-size: 16px;
-            outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--accent);
+        input[type="text"].terminal-input:focus {
+            border-color: #333;
+            box-shadow: 0 0 10px rgba(255,107,53,0.05);
         }
 
-        .grid-cards {
+        /* GRID DE TARJETAS LOBBY */
+        .lobby-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .card {
+        .lobby-card {
             background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 24px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .card h3 { font-size: 20px; }
+        .lobby-card h3 { font-size: 20px; font-weight: 700; }
 
+        .lobby-card input {
+            padding: 14px;
+            font-size: 14px;
+        }
+
+        /* BOTONES ORIGINALES (Terminal) */
         .btn {
             background: var(--accent);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 14px;
+            padding: 16px;
             font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: background 0.2s, opacity 0.2s;
+            width: 100%;
         }
 
-        .btn:hover { opacity: 0.9; }
-        .btn-secondary { background: #222; border: 1px solid var(--panel-border); }
+        .btn:hover { background: #ff8c61; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary { background: #202020; border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: #282828; }
+
+        /* ESTILOS DE SALA DE ESPERA (Room) - FOTO 1 */
+        .room-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .room-title-group h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .player-list-original {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .player-item-original {
+            background: #181818;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 18px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-name-wrap { display: flex; align-items: center; gap: 8px; }
+
+        .kick-btn {
+            background: transparent;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+        .kick-btn:hover { color: #ff4444; }
+
+        .room-code-display {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
 
         /* GAME BOARD */
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
         .board {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
             gap: 6px;
-            margin: 0 auto 30px auto;
-            width: fit-content;
+            margin-bottom: 40px;
         }
 
         .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 
         .tile {
-            width: 55px;
-            height: 55px;
-            border: 2px solid var(--panel-border);
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: 800;
             text-transform: uppercase;
-            border-radius: 6px;
+            border-radius: 8px;
         }
 
         .tile.correct { background: var(--correct); border-color: var(--correct); }
         .tile.present { background: var(--present); border-color: var(--present); }
         .tile.absent { background: var(--absent); border-color: var(--absent); }
 
-        /* KEYBOARD */
-        .keyboard { display: flex; flex-direction: column; gap: 8px; max-width: 500px; margin: 0 auto; }
+        /* KEYBOARD ORIGINAL */
+        .keyboard { display: flex; flex-direction: column; gap: 8px; width: 100%; }
         .kb-row { display: flex; justify-content: center; gap: 6px; }
         .key {
-            background: #222;
+            background: #202020;
             color: white;
             border: none;
             border-radius: 6px;
-            height: 50px;
+            height: 52px;
             font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             flex: 1;
+            font-size: 13px;
         }
-        .key.large { flex: 1.5; }
+        .key.large { flex: 1.6; }
         .key.correct { background: var(--correct); }
         .key.present { background: var(--present); }
         .key.absent { background: var(--absent); }
 
         .hidden { display: none !important; }
-        .player-list { list-style: none; margin: 15px 0; }
-        .player-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--panel-border); }
     </style>
 </head>
 <body>
@@ -216,47 +314,57 @@
     </header>
 
     <div class="main-container">
-        <!-- PANTALLA INICIAL -->
+        <!-- PANTALLA INICIAL (Lobby) - FOTO 2 -->
         <div id="lobby-screen">
-            <h1 class="hero-title">Wordle Multijugador</h1>
-            <p class="hero-sub">Hasta 7 jugadores en tiempo real. Adivina la palabra antes que los demás.</p>
-
-            <div class="input-group">
-                <label>Tu Nombre</label>
-                <input type="text" id="nickname" placeholder="Introduce tu apodo">
+            <div class="lobby-hero">
+                <h1 class="hero-title">Wordle Multijugador</h1>
+                <p class="hero-sub">Hasta 7 jugadores en tiempo real. Adivina la palabra antes que los demás.</p>
             </div>
 
-            <div class="grid-cards">
-                <div class="card">
+            <div class="input-group">
+                <label class="terminal-label">Tu Nombre</label>
+                <input type="text" id="nickname" class="terminal-input" placeholder="Introduce tu apodo">
+            </div>
+
+            <div class="lobby-grid">
+                <div class="lobby-card">
                     <h3>Crear Sala</h3>
                     <button class="btn" onclick="createRoom()">Crear nueva partida</button>
                 </div>
-                <div class="card">
+                <div class="lobby-card">
                     <h3>Unirse a Sala</h3>
-                    <input type="text" id="room-code" placeholder="Código (4 dígitos)">
+                    <input type="text" id="room-code" class="terminal-input" placeholder="Código (4 dígitos)">
                     <button class="btn btn-secondary" onclick="joinRoom()">Entrar</button>
                 </div>
             </div>
         </div>
 
-        <!-- SALA DE ESPERA -->
-        <div id="room-screen" class="card hidden">
-            <h2 id="room-title">Sala: ----</h2>
-            <ul id="players-ul" class="player-list"></ul>
+        <!-- SALA DE ESPERA (Room) - FOTO 1 -->
+        <div id="room-screen" class="room-panel hidden">
+            <div class="room-header">
+                <div class="room-title-group">
+                    <h2 id="room-title">Sala: ----</h2>
+                    <ul id="players-ul" class="player-list-original"></ul>
+                </div>
+                <div class="room-code-display" id="room-code-big">XXXX</div>
+            </div>
+            
             <button id="start-btn" onclick="hostStartGame()" class="btn hidden">Empezar Partida</button>
         </div>
 
-        <!-- JUEGO -->
+        <!-- PANTALLA DE JUEGO -->
         <div id="game-screen" class="hidden">
-            <div class="board" id="board"></div>
-            <div class="keyboard" id="keyboard"></div>
+            <div class="game-area">
+                <div class="board" id="board"></div>
+                <div class="keyboard" id="keyboard"></div>
+            </div>
         </div>
 
-        <!-- RESULTADOS -->
-        <div id="results-screen" class="card hidden">
-            <h2>Clasificación de la ronda</h2>
-            <div id="ranking-list" style="margin: 20px 0;"></div>
-            <button id="next-round-btn" onclick="readyForNextRound()" class="btn">Listo para la siguiente ronda</button>
+        <!-- RESULTADOS (Rankings) -->
+        <div id="results-screen" class="room-panel hidden">
+            <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase;">Resultados de la Ronda</h2>
+            <div id="ranking-list" style="margin-bottom: 30px;"></div>
+            <button id="next-round-btn" onclick="readyForNextRound()" class="btn btn-secondary">Listo para siguiente ronda</button>
         </div>
     </div>
 
@@ -402,6 +510,7 @@
         document.getElementById('lobby-screen').classList.add('hidden');
         document.getElementById('room-screen').classList.remove('hidden');
         document.getElementById('room-title').innerText = `Sala: ${roomCode}`;
+        document.getElementById('room-code-big').innerText = roomCode; // Código en grande (Foto 1)
         if (isHost) document.getElementById('start-btn').classList.remove('hidden');
         updatePlayerListUI();
     }
@@ -411,15 +520,17 @@
         ul.innerHTML = '';
         Object.entries(players).forEach(([id, p]) => {
             const li = document.createElement('li');
-            li.className = 'player-item';
-            li.innerHTML = `<span>${p.name} ${p.ready ? '✅' : ''}</span>`;
+            li.className = 'player-item-original';
+            li.innerHTML = `
+                <div class="player-name-wrap">
+                    <span>${p.name}</span>
+                    ${p.ready ? '<span style="color: #10b981; font-size: 11px; text-transform: uppercase;">[LISTO]</span>' : ''}
+                </div>
+            `;
             if (isHost && id !== myId) {
                 const kickBtn = document.createElement('button');
+                kickBtn.className = 'kick-btn';
                 kickBtn.innerText = '✕';
-                kickBtn.style.background = 'transparent';
-                kickBtn.style.border = 'none';
-                kickBtn.style.color = '#ff4444';
-                kickBtn.style.cursor = 'pointer';
                 kickBtn.onclick = () => kickPlayer(id);
                 li.appendChild(kickBtn);
             }
@@ -550,7 +661,7 @@
         const activePlayers = Object.entries(players);
         const total = activePlayers.length;
 
-        // REGLA 1VS1 (2 Jugadores)
+        // LÓGICA 1VS1 (2 Jugadores) - CORE REGRESA AQUÍ
         if (total === 2) {
             const [p1Id, p1] = activePlayers[0];
             const [p2Id, p2] = activePlayers[1];
@@ -559,8 +670,8 @@
 
             if (p1.won) winnerId = p1Id;
             else if (p2.won) winnerId = p2Id;
-            else if (p1.attempts >= 6 && !p1.won) winnerId = p2Id;
-            else if (p2.attempts >= 6 && !p2.won) winnerId = p1Id;
+            else if (p1.attempts >= 6 && !p1.won) winnerId = p2Id; // P1 pierde
+            else if (p2.attempts >= 6 && !p2.won) winnerId = p1Id; // P2 pierde
 
             if (winnerId) {
                 const rankings = activePlayers
@@ -573,7 +684,7 @@
             }
         }
 
-        // MULTIJUGADOR (3-7 Jugadores)
+        // LÓGICA MULTIJUGADOR (3 a 7 jugadores)
         const allFinished = activePlayers.every(([_, p]) => p.won || p.attempts >= 6);
         if (allFinished) {
             const rankings = activePlayers.map(([id, p]) => ({ id, ...p })).sort((a, b) => {
@@ -599,10 +710,13 @@
         list.innerHTML = '';
         rankings.forEach((p, idx) => {
             const item = document.createElement('div');
-            item.className = 'player-item';
+            item.className = 'player-item-original';
             item.innerHTML = `
                 <span>#${idx + 1} ${p.name}</span>
-                <span>${p.won ? '🏆 Ganó' : '❌ Perdió'} (${p.attempts}/6)</span>
+                <span style="text-transform: uppercase; font-weight: 700;">
+                    ${p.won ? '<span style="color: #10b981;">[GANÓ]</span>' : '<span style="color: #ff4444;">[PERDIÓ]</span>'} 
+                    ${p.attempts}/6 ${idx === 0 ? '🏆' : ''}
+                </span>
             `;
             list.appendChild(item);
         });
