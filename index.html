@@ -1,4 +1,4 @@
-<!-- FIESTA WORDLE VERSION 24 -->
+<!-- FIESTA WORDLE VERSION 25 -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1303,7 +1303,7 @@
 </head>
 
 <body>
-<div id="appVersionLabel" aria-label="Versión 24">v24</div>
+<div id="appVersionLabel" aria-label="Versión 25">v25</div>
 
   <div class="noise-overlay"></div>
 
@@ -1710,7 +1710,7 @@
   ></div>
 
   <script>
-const APP_VERSION = "24";
+const APP_VERSION = "25";
 
 /* Diccionario integrado para evitar dependencias externas */
 const PALABRAS_RESPUESTA = [
@@ -13468,7 +13468,9 @@ const PALABRAS_VALIDAS = new Set([
     // TEMPORARY TURN-ONLY TEST: if this connects, TURN is working and
     // we can restore normal ICE afterwards. Metered's current documented
     // global endpoint set includes UDP/TCP on 80/443 plus TURNS on 443.
-    const ICE_SERVERS = [];
+    const ICE_SERVERS = [
+  { urls: "stun:stun.l.google.com:19302" }
+];
 
     const TURN_CONFIGURED =
       !TURN_USERNAME.startsWith("PON_AQUI_") &&
