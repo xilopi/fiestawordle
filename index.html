@@ -1,4 +1,4 @@
-<!-- FIESTA WORDLE V93 -->
+<!-- FIESTA WORDLE V97 -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17671,7 +17671,7 @@ const PALABRAS_VALIDAS = new Set([
       "ZAPATOS"
     ]);
 
-    // V97 · Ampliación morfológica: añadir plurales de las palabras del diccionario.
+    // 7 · Ampliación morfológica: añadir plurales de las palabras del diccionario.
     // Esto permite que, si existe el singular, su plural habitual también pueda
     // usarse como intento en TILDES, manteniendo el límite de 5–9 letras.
     function pluralizarSinTilde(palabra) {
@@ -17725,7 +17725,7 @@ const PALABRAS_VALIDAS = new Set([
       ...PALABRAS_PLURALES_TILDES
     ]);
 
-    // V97 · Diccionario muy amplio de intentos sin tilde (6–9 letras), con gerundios y participios.
+    // 7 · Diccionario muy amplio de intentos sin tilde (6–9 letras), con gerundios y participios.
     // Se mantiene separado para poder ampliar el vocabulario sin tocar
     // el diccionario general de 5 letras ni las soluciones con tilde.
 
@@ -23354,6 +23354,6 @@ els.btnBackFromModes.addEventListener("click", () => {
 
     })();
   </script>
-  <div id="appVersionLabel" aria-label="Versión 93">v93 · Fiesta Wordle está en desarrollo, ten en cuenta que puede contener errores.</div>
+  <div id="appVersionLabel" aria-label="Versión 97">v97 · Fiesta Wordle está en desarrollo, ten en cuenta que puede contener errores.</div>
 </body>
 </html>
